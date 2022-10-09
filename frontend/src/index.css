@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-base::-webkit-scrollbar {
+  padding: 2px;
+  border-left: 1px rgb(30 41 59 / var(--tw-border-opacity)) solid;
+  width: 8px;               /* width of the entire scrollbar */
+}
+
+.scrollbar-base::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgb(130 120 200);
+  margin: 1px
+}

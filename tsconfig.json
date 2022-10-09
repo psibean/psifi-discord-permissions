@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "es2020",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "baseUrl": ".",
+    "strictNullChecks": true,
+    "isolatedModules": false,
+    "composite": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "paths": {
+      "*": ["frontend/node_modules/*", "backend/node_modules/*"],
+    },
+  },
+  "include": [
+    "./frontend",
+    "./backend",
+    "./psd-types"
+  ],
+}

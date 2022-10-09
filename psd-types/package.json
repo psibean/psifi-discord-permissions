@@ -1,0 +1,18 @@
+{
+  "name": "psd-types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "psibean",
+  "license": "ISC",
+  "devDependencies": {
+    "@oauth-everything/passport-discord": "^1.0.2",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "discord-api-types": "^0.37.15"
+  }
+}
