@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Account from './pages/dashboard/Account'
 import ChannelPermissionOverwrites from './pages/dashboard/ChannelPermissionOverwrites'
-import Channels from './pages/dashboard/Channels'
 import Guild from './pages/dashboard/Guild'
 import GuildInviteRedirectHandler from './pages/dashboard/GuildInviteRedirectHandler'
 import Guilds from './pages/dashboard/Guilds'
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
       {
         path: CLIENT_ROUTES.DASHBOARD.CHANNEL_OVERWRITES,
         element: <ChannelPermissionOverwrites />
-      },
-      {
-        path: CLIENT_ROUTES.DASHBOARD.CHANNELS,
-        element: <Channels />
       },
       {
         path: CLIENT_ROUTES.DASHBOARD.GUILD,

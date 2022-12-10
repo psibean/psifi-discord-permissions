@@ -1,7 +1,7 @@
 import { PermissionFlagsBits } from "discord-api-types/v10";
-import { createPsifiPermission, managePermissionsForChannel, PsifiPermisssion, viewChannelPermissionForChannel } from "./shared";
+import { createPsifiPermission, managePermissionsForChannel, PsifiPermission, viewChannelPermissionForChannel } from "./shared";
 
-export const textChannelPermissions: PsifiPermisssion[] = [
+export const textChannelPermissions: PsifiPermission[] = [
   // GENERAL CHANNEL PERMISSIONS  
 
   viewChannelPermissionForChannel,

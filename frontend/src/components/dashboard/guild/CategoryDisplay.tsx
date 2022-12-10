@@ -14,7 +14,7 @@ export default ({ category, onChannelClick }: CategoryDisplayProps) => {
   const handleCollapse = useCallback(() => setCollapsed(!isCollapsed), [isCollapsed])
 
   return (
-    <div className="flex flex-col mb-1">
+    <div className="flex flex-col mb-2">
       <div
         className="flex flex-row align-center mb-1 cursor-pointer items-center text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300"
         onClick={handleCollapse}
@@ -24,7 +24,7 @@ export default ({ category, onChannelClick }: CategoryDisplayProps) => {
           { category.name.toUpperCase() }
         </div>
       </div>
-      { !isCollapsed && category.children.map(channel => <ChannelItem channel={channel} onClick={onChannelClick} />) }
+      { !isCollapsed && category.children.map(channel => <ChannelItem key={`${category.id}-channel-${channel.id}`} channel={channel} onClick={onChannelClick} />) }
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { PermissionFlagsBits } from "discord-api-types/v10";
 
-export type PsifiPermisssion = {
+export type PsifiPermission = {
   name: string;
   category: string;
   description: string;
@@ -8,7 +8,7 @@ export type PsifiPermisssion = {
   has: (permissions: bigint) => boolean;
 }
 
-export const createPsifiPermission = (name: string, description: string, category: string, bitfield: bigint): PsifiPermisssion => {
+export const createPsifiPermission = (name: string, description: string, category: string, bitfield: bigint): PsifiPermission => {
   return {
     name,
     description,

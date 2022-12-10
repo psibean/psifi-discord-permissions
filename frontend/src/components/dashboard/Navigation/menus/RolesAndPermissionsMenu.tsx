@@ -11,10 +11,6 @@ export default () => {
       {
         label: "Server",
         path: `/dashboard/guilds/${selectedGuild?.id}`
-      },
-      {
-        label: "Channels",
-        path: `/dashboard/guilds/${selectedGuild?.id}/channels`,
       }
     ]
   }, [selectedGuild])

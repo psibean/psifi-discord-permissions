@@ -1,8 +1,8 @@
 import { PermissionFlagsBits } from "discord-api-types/v10";
-import { createPsifiPermission, PsifiPermisssion } from "./shared";
+import { createPsifiPermission, PsifiPermission } from "./shared";
 
 // ALL SERVER PERMISSIONS
-export const serverPermissions: PsifiPermisssion[] = [
+export const serverPermissions: PsifiPermission[] = [
   // General Server Permissions
   createPsifiPermission('View Channels', 'Allows members to view channels by default (excluding private channels).', 'General Server Permissions', PermissionFlagsBits.ViewChannel),
   createPsifiPermission('Manage Channels', 'Allows members to create, edit, or delete channels.', 'General Server Permissions', PermissionFlagsBits.ManageChannels),

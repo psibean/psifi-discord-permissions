@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 import { CgCheckO, CgCloseO, CgFormatSlash } from "react-icons/cg";
-import { PsifiPermisssion } from "../../permissions/shared";
+import { PsifiPermission } from "../../permissions/shared";
 import { ChannelPermissionOverwrite } from "../../../../psd-types/src/types";
 
 type OverWriteStatus = "allow" | "deny" | "" 
@@ -21,7 +21,7 @@ const OverwriteStatusDisplay = ({ className, enabled, children }: OverwriteStatu
 )
 
 type OverWriteToggleProps = {
-  permission: PsifiPermisssion;
+  permission: PsifiPermission;
   permissionOverwrite: ChannelPermissionOverwrite;
 }
 
