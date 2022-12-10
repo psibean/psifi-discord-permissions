@@ -5,6 +5,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated) {
     next();
   } else {
-    res.status(403).json(createHttpError(403, "Not logged in."));
+    res.status(401).json(createHttpError(401, "Not logged in."));
   }
 }
