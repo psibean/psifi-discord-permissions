@@ -1,6 +1,6 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import { setSimulatedServer, SimulatedChannels, SimulatedServerPermissions } from '../state/simulatedServer.slice';
-import { selectChannel, SelectedChannelState } from '../state/selectedChannel.slice';
+import { selectChannel } from '../state/selectedChannel.slice';
 import { SelectedGuildState, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
@@ -22,7 +22,7 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
   });
 }
 
-export const authenticatedGetJson = <T = any>(url: string, request: RequestInit = {}) => {
+export const authenticatedGetJson = <T>(url: string, request: RequestInit = {}) => {
   return authenticatedGet(url, request)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     .then(res => res.json().then(data => ({ status: res.status, data } as { status: number, data: T }))

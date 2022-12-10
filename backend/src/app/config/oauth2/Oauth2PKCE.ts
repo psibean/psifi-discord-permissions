@@ -11,9 +11,9 @@ export type PartiallyOptional<T, K extends keyof T> = Partial<Pick<T, K>> & Omit
 
 export type OAuth2PLCEStateGenerator = (req?: Request) => string;
 
-export type OAuth2PKCEScopeError = {
+export type OAuth2PKCEError = {
   statusCode: number;
-  data?: any;
+  error: string;
 }
 
 export interface OAuth2PKCEConfig {
