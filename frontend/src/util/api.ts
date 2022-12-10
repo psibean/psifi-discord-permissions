@@ -4,7 +4,7 @@ import { selectChannel, SelectedChannelState } from '../state/selectedChannel.sl
 import { SelectedGuildState, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
-import { ChannelPermissionOverwrites } from '../../../psd-types/src/types';
+import { ChannelPermissionOverwrites, SelectedGuildChannel } from '../../../psd-types/src/types';
 
 export const get = (url: string, options: RequestInit = {}) => {
   return fetch(url, {
@@ -100,7 +100,7 @@ export const fetchChannels = (guildId: string) => {
 export const fetchChannel = (guildId: string, channelId: string, dispatch: Dispatch) => {
   return authenticatedGetJson(API_ROUTES.CHANNEL(guildId, channelId)).then(({ status, data }) => {
     if (status === 200) {
-      dispatch(selectChannel(data as SelectedChannelState));
+      dispatch(selectChannel(data as SelectedGuildChannel));
     }
   });
 }
