@@ -9,8 +9,11 @@ export interface OAuthUserFetchOptions extends BaseFetchOptions {
 }
 
 export class OAuthUserManager extends CachedManager<string, OAuthUser, string> {
+  public static SWEEP_INTERVAL = 1.8e+6;
+
   public constructor(client: Client) {
     super(client, OAuthUser);
+    setTimeout(() => this.sweep(), OAuthUserManager.SWEEP_INTERVAL)
   }
 
   public create(options: OAuthUserOptions, store = true) {
@@ -35,6 +38,16 @@ export class OAuthUserManager extends CachedManager<string, OAuthUser, string> {
 
   public delete(id: string) {
     this.cache.delete(id);
+  }
+
+  public sweep() {
+    const expiredUsers = Array.from(this.cache.values()).filter(oAuthUser => 
+      (Date.now() - oAuthUser.lastTouched) >= OAuthUserManager.SWEEP_INTERVAL
+    )
+    for (const oauthUser of expiredUsers) {
+      this.delete(oauthUser.id);
+    }
+    setTimeout(() => this.sweep(), OAuthUserManager.SWEEP_INTERVAL)
   }
 }
 

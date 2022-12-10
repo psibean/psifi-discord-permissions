@@ -13,6 +13,7 @@ export class OAuthUser {
   guilds: Collection<Snowflake, ListedGuild>;
   accessToken: string;
   refreshToken: string;
+  lastTouched: number;
 
   public constructor(client: Client, { profile, guilds }: OAuthUserOptions) {
     this.client = client;
@@ -27,6 +28,7 @@ export class OAuthUser {
 
       return [oAuthGuild.id, oAuthGuildToListedGuild(oAuthGuild)]
     }))
+    this.lastTouched = Date.now();
   }
 
   public get id() {
@@ -38,5 +40,9 @@ export class OAuthUser {
       profile: this.profile,
       guilds: Array.from(this.guilds.values())
     };
+  }
+
+  public touch() {
+    this.lastTouched = Date.now();
   }
 }
