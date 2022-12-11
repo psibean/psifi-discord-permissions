@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useSelectedGuild } from "../../state/selectedGuild.slice";
-import { fetchNewGuild } from "../../util/api";
+import { fetchGuild } from "../../util/api";
 import { useDispatch } from "react-redux";
 import { serverPermissions } from "../../permissions/serverPermissions";
 import Loading from "../../components/util/Loading";
@@ -14,6 +14,8 @@ import { PsifiPermission } from "../../permissions/shared";
 import { textChannelPermissions } from "../../permissions/textChannelPermissions";
 import { voiceChannelPermissions } from "../../permissions/voiceChannelPermissions";
 import { selectChannel, useSelectedChannel } from "../../state/selectedChannel.slice";
+import { HttpError } from "http-errors";
+import { CLIENT_ROUTES } from "../../util/constants";
 
 type CategoryChannelMap = {
   [k: string]: SelectedGuildCategory;
@@ -26,6 +28,7 @@ export default () => {
 
   const selectedGuild = useSelectedGuild();
   const selectedChannel = useSelectedChannel();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   
   const [isLoading, setLoading] = useState(true);
@@ -48,14 +51,26 @@ export default () => {
   
   useEffect(() => {
     console.log("USE");
-    if (selectedGuild.guild === null && guildId) {
-      fetchNewGuild(guildId, dispatch)
-        .catch(error => {
-          console.log(error);
-        });
+
+    if (isLoading) {
+      const loadGuild = async () => {
+        try {
+          await fetchGuild(guildId!, dispatch)
+        } catch(error) {
+          if (error instanceof HttpError) {
+            if (error.statusCode === 403) setLoading(false);
+            if (error.statusCode === 401) {
+              // handle logged out
+              navigate(CLIENT_ROUTES.ROOT);
+            }
+          }
+        }
+      }
+
+      loadGuild();
     }
 
-    if (selectedGuild.guild !== null) {
+    if (!isLoading && selectedGuild.guild !== null) {
       const channelList = Object.values(selectedGuild.channels);
       const categoryChannelMap: CategoryChannelMap = {};
       const categories = Object.values(selectedGuild.channels).filter(channel => channel.type === ChannelType.GuildCategory);
@@ -85,9 +100,13 @@ export default () => {
       console.log(categoryChannelMap);
       setLoading(false);
     }
-  }, [selectedGuild])
+  }, [selectedGuild, isLoading])
 
-  if (isLoading) return <Loading /> 
+  if (isLoading) return <Loading text="Loading guild..." />
+
+  if (!isLoading && selectedGuild.guild === null) {
+    navigate(CLIENT_ROUTES.DASHBOARD.GUILDS);
+  }
 
   return (
     <div className="flex flex-col flex-grow w-4/5 items-center overflow-y-auto px-4 pt-2">

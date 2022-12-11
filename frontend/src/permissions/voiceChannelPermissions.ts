@@ -4,7 +4,7 @@ import { createInviteForVoiceChannel, createPsifiPermission, manageEventsPermiss
 export const voiceChannelPermissions = [
   // GENERAL CHANNEL PERMISSIONS  
   viewChannelPermissionForChannel,
-  createPsifiPermission('Manage Channel', `Allows members to change this channel's name, description, and voice settings. They can also delete the channel.`, 'General Channel Permissions', PermissionFlagsBits.ViewChannel),
+  createPsifiPermission('Manage Channel', `Allows members to change this channel's name, description, and voice settings. They can also delete the channel.`, 'General Channel Permissions', PermissionFlagsBits.ManageChannels),
   managePermissionsForChannel,
   // Membership Permissions
   createInviteForVoiceChannel,
@@ -28,7 +28,6 @@ export const voiceChannelPermissions = [
   createPsifiPermission('Send Messages in Threads', 'Allows members to send messages in threads under this channel.', 'Text Channel Permissions', PermissionFlagsBits.SendMessagesInThreads),
   createPsifiPermission('Create Public Threads', 'Allow members to create threads that everyone in a channel can view.', 'Text Channel Permissions', PermissionFlagsBits.CreatePublicThreads),
   createPsifiPermission('Create Private Threads', 'Allow members to create invite-only threads.', 'Text Channel Permissions', PermissionFlagsBits.CreatePrivateThreads),
-  createPsifiPermission('Embed Links', 'Allows links that members share to show embedded content in text channels.', 'Text Channel Permissions', PermissionFlagsBits.EmbedLinks),
   
   
   createPsifiPermission('Use External Emoji', 'Allows members to use emoji from other servers, if they’re a Discord Nitro member.', 'Voice Channel Chat Permissions', PermissionFlagsBits.UseExternalEmojis),

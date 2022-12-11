@@ -4,7 +4,7 @@ import { selectChannel } from '../state/selectedChannel.slice';
 import { SelectedGuildState, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
-import { ChannelPermissionOverwrites, SelectedGuildChannel } from '../../../psd-types/src/types';
+import { ChannelPermissionOverwrites, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRoles } from '../../../psd-types/src/types';
 
 export const get = (url: string, options: RequestInit = {}) => {
   return fetch(url, {
@@ -54,7 +54,7 @@ export const fetchUserData = (dispatch: Dispatch) => {
   });
 }
 
-export const fetchNewGuild = (guildId: string, dispatch: Dispatch) => {
+export const fetchGuild = (guildId: string, dispatch: Dispatch) => {
   return authenticatedGetJson<SelectedGuildState>(API_ROUTES.GUILD(guildId)).then(({status, data }) => {
     if (status === 200 && data.guild !== null) {
       const initialChannels: SimulatedChannels = {};
@@ -89,6 +89,9 @@ export const fetchNewGuild = (guildId: string, dispatch: Dispatch) => {
           roles: [data.guild.id]
         },
       }))
+    } else {
+      dispatch(selectGuild({ guild: null, channels: {} as SelectedGuildChannels , roles: {} as SelectedGuildRoles }));
+      throw data;
     }
   });
 }

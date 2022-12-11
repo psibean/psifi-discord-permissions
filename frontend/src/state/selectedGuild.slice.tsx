@@ -14,9 +14,8 @@ const selectedGuldSlice = createSlice({
   name: 'selectedGuild',
   initialState: {
     guild: null,
-    roles: [],
-    channels: [],
-    serverPermissions: [],
+    roles: {},
+    channels: {}
   },
   reducers: {
     selectGuild: (state, action) => {
