@@ -4,6 +4,7 @@ import createHttpError from "http-errors";
 import logger from "../../utils/logger.js";
 import botClient from "../../bot/bot.js";
 import { buildSelectedChannels, buildSelectedRoles, channelToChannelWithOverwrites, guildToListedGuild } from "../../utils/transformers.js";
+import { CHANNELS_INTERNAL_ERROR, CHANNEL_INTERNAL_ERROR, CHANNEL_NOT_FOUND, GUILDS_INTERNAL_ERROR, GUILD_INTERNAL_ERROR, GUILD_NOT_FOUND, ROLES_INTERNAL_ERROR } from "../../../../psd-types/src/errors.js";
 
 export default class DiscordController {
 
@@ -19,7 +20,7 @@ export default class DiscordController {
       });
     } catch(error) {
       logger.error(error);
-      next(createHttpError(500, "Failed to get guild"));
+      next(createHttpError(500, GUILD_INTERNAL_ERROR));
     }
   }
 
@@ -40,7 +41,7 @@ export default class DiscordController {
       });
     } catch (error) {
       logger.error(error);
-      next(createHttpError(500, "Failed to get guilds."));
+      next(createHttpError(500, GUILDS_INTERNAL_ERROR));
     }
   }
 
@@ -51,7 +52,7 @@ export default class DiscordController {
       return res.status(200).json({ roles: guild.roles.cache.values() });
     } catch(error) {
       logger.error(error);
-      next(createHttpError(500, "Failed to get roles."))
+      next(createHttpError(500, ROLES_INTERNAL_ERROR))
     }
   }
 
@@ -63,7 +64,7 @@ export default class DiscordController {
     } catch(error) {
       logger.error(error);
       if (typeof error === 'string') {
-        next(createHttpError(500, "Failed to get channels."));
+        next(createHttpError(500, CHANNELS_INTERNAL_ERROR));
       } else {
         next(error);
       }
@@ -76,13 +77,13 @@ export default class DiscordController {
       const guild = this.getGuildById(req);
       const channel = guild.channels.cache.get(channelId);
       if (!channel) 
-        throw createHttpError(500, 'Channel not found.');
+        throw createHttpError(404, CHANNEL_NOT_FOUND);
 
       res.status(200).json(channelToChannelWithOverwrites(channel));
     } catch(error) {
       logger.error(error);
       if (typeof error === 'string') 
-        next(createHttpError(500, "Failed to get channel"));
+        next(createHttpError(500, CHANNEL_INTERNAL_ERROR));
       else
         next(error);
     }
@@ -92,7 +93,7 @@ export default class DiscordController {
     const { guildId } = req.params as { guildId: string };
 
     if (!botClient.guilds.cache.has(guildId)) {
-      throw createHttpError(400, "Guild not found.");
+      throw createHttpError(400, GUILD_NOT_FOUND);
     }
     return botClient.guilds.cache.get(guildId) as Guild;
   }

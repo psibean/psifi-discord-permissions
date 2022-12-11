@@ -54,46 +54,53 @@ export const fetchUserData = (dispatch: Dispatch) => {
   });
 }
 
-export const fetchGuild = (guildId: string, dispatch: Dispatch) => {
-  return authenticatedGetJson<SelectedGuildState>(API_ROUTES.GUILD(guildId)).then(({status, data }) => {
-    if (status === 200 && data.guild !== null) {
-      const initialChannels: SimulatedChannels = {};
+export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
+  const { status, data } = await authenticatedGetJson<SelectedGuildState | { error: { message: string } }>(API_ROUTES.GUILD(guildId));
+  console.log("GUILD DATA: ");
+  console.log(data);
+  if (status === 200 && "guild" in data && data.guild !== null) {
+    const initialChannels: SimulatedChannels = {};
 
-      for (const [channelId, selectedGuildChannel] of Object.entries(data.channels)) {
+    for (const [channelId, selectedGuildChannel] of Object.entries(data.channels)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      initialChannels[channelId] = { id: channelId, type: selectedGuildChannel.type, name: selectedGuildChannel.name, overwrites: {}};
+      for (const [roleId, roleOverwrites] of Object.entries(selectedGuildChannel.permissionOverwrites)) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        initialChannels[channelId] = { id: channelId, type: selectedGuildChannel.type, name: selectedGuildChannel.name, overwrites: {}};
-        for (const [roleId, roleOverwrites] of Object.entries(selectedGuildChannel.permissionOverwrites)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          (initialChannels[channelId].overwrites as ChannelPermissionOverwrites)[roleId] = roleOverwrites;
-        }
+        (initialChannels[channelId].overwrites as ChannelPermissionOverwrites)[roleId] = roleOverwrites;
       }
+    }
 
-      const serverPermissions = Object.values(data.roles).reduce((previous, current) => {
-        previous[current.id] = current.permissions;
-        return previous;
-      }, {} as SimulatedServerPermissions );
+    const serverPermissions = Object.values(data.roles).reduce((previous, current) => {
+      previous[current.id] = current.permissions;
+      return previous;
+    }, {} as SimulatedServerPermissions );
 
-      const rolePermissions: Record<string, string> = {};
-      Object.values(data.roles).forEach(role => {
-        rolePermissions[role.id] = role.permissions;
-      })
-      
-      dispatch(selectGuild(data));
-      dispatch(setSimulatedServer({
-        id: data.guild.id,
-        name: data.guild.name,
-        channels: initialChannels,
-        permissions: serverPermissions,
-        member: {
-          permissions: "0",
-          roles: [data.guild.id]
-        },
-      }))
-    } else {
-      dispatch(selectGuild({ guild: null, channels: {} as SelectedGuildChannels , roles: {} as SelectedGuildRoles }));
+    const rolePermissions: Record<string, string> = {};
+    Object.values(data.roles).forEach(role => {
+      rolePermissions[role.id] = role.permissions;
+    })
+    
+    dispatch(selectGuild(data));
+    dispatch(setSimulatedServer({
+      id: data.guild.id,
+      name: data.guild.name,
+      channels: initialChannels,
+      permissions: serverPermissions,
+      member: {
+        permissions: "0",
+        roles: [data.guild.id]
+      },
+    }))
+  } else {
+    dispatch(selectGuild({ guild: null, channels: {} as SelectedGuildChannels , roles: {} as SelectedGuildRoles }));
+    
+    if ("error" in data) {
+      throw new Error(data.error.message);
+    }
+    else {
       throw data;
     }
-  });
+  }
 }
 
 export const fetchChannels = (guildId: string) => {

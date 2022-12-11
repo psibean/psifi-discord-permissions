@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import { useSelectedGuild } from "../../state/selectedGuild.slice";
+import { selectGuild, useSelectedGuild } from "../../state/selectedGuild.slice";
 import { fetchGuild } from "../../util/api";
 import { useDispatch } from "react-redux";
 import { serverPermissions } from "../../permissions/serverPermissions";
@@ -16,6 +16,7 @@ import { voiceChannelPermissions } from "../../permissions/voiceChannelPermissio
 import { selectChannel, useSelectedChannel } from "../../state/selectedChannel.slice";
 import { HttpError } from "http-errors";
 import { CLIENT_ROUTES } from "../../util/constants";
+import { NOT_LOGGED_IN } from "../../../../psd-types/src/errors";
 
 type CategoryChannelMap = {
   [k: string]: SelectedGuildCategory;
@@ -55,14 +56,11 @@ export default () => {
     if (isLoading) {
       const loadGuild = async () => {
         try {
-          await fetchGuild(guildId!, dispatch)
+          await fetchGuild(guildId!, dispatch);
+          setLoading(false);
         } catch(error) {
-          if (error instanceof HttpError) {
-            if (error.statusCode === 403) setLoading(false);
-            if (error.statusCode === 401) {
-              // handle logged out
-              navigate(CLIENT_ROUTES.ROOT);
-            }
+          if (error instanceof Error && error.message === NOT_LOGGED_IN) {
+            navigate(CLIENT_ROUTES.ROOT);
           }
         }
       }
@@ -75,7 +73,6 @@ export default () => {
       const categoryChannelMap: CategoryChannelMap = {};
       const categories = Object.values(selectedGuild.channels).filter(channel => channel.type === ChannelType.GuildCategory);
 
-      console.log(categories);
       categories.forEach(category => categoryChannelMap[category.id] = { ...category, children: [] });
 
       channelList.forEach(channel => {
