@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import { selectGuild, useSelectedGuild } from "../../state/selectedGuild.slice";
+import { useSelectedGuild } from "../../state/selectedGuild.slice";
 import { fetchGuild } from "../../util/api";
 import { useDispatch } from "react-redux";
 import { serverPermissions } from "../../permissions/serverPermissions";
@@ -14,9 +14,9 @@ import { PsifiPermission } from "../../permissions/shared";
 import { textChannelPermissions } from "../../permissions/textChannelPermissions";
 import { voiceChannelPermissions } from "../../permissions/voiceChannelPermissions";
 import { selectChannel, useSelectedChannel } from "../../state/selectedChannel.slice";
-import { HttpError } from "http-errors";
 import { CLIENT_ROUTES } from "../../util/constants";
 import { NOT_LOGGED_IN } from "../../../../psd-types/src/errors";
+import ChannelItem from "../../components/dashboard/guild/ChannelItem";
 
 type CategoryChannelMap = {
   [k: string]: SelectedGuildCategory;
@@ -33,7 +33,7 @@ export default () => {
   const dispatch = useDispatch();
   
   const [isLoading, setLoading] = useState(true);
-  const [categoryChannels, setCategoryChannels] = useState(null as CategoryChannelMap | null);
+  const [categoryChannels, setCategoryChannels] = useState(null as (SelectedGuildCategory | SelectedGuildChannel)[] | null);
   const [availablePermissions, setAvailablePermissions] = useState(null as PsifiPermission[] | null);
 
   const handleChannelClick = useCallback((channel: SelectedGuildChannel) => {
@@ -71,9 +71,18 @@ export default () => {
     if (!isLoading && selectedGuild.guild !== null) {
       const channelList = Object.values(selectedGuild.channels);
       const categoryChannelMap: CategoryChannelMap = {};
-      const categories = Object.values(selectedGuild.channels).filter(channel => channel.type === ChannelType.GuildCategory);
+      const categories = channelList.filter(channel => channel.type === ChannelType.GuildCategory || channel.parent === null);
+      const rootChannelList = [] as (SelectedGuildCategory | SelectedGuildChannel)[];
 
-      categories.forEach(category => categoryChannelMap[category.id] = { ...category, children: [] });
+      categories.forEach(rootChannel => { 
+        if (rootChannel.type === ChannelType.GuildCategory) {
+          const categoryChannel = { ...rootChannel, children: [] };
+          categoryChannelMap[rootChannel.id] = categoryChannel;
+          rootChannelList.push(categoryChannel);
+        } else {
+          rootChannelList.push(rootChannel)
+        } 
+      });
 
       channelList.forEach(channel => {
         if (channel.type !== ChannelType.GuildCategory && channel.parent !== null) {
@@ -88,13 +97,19 @@ export default () => {
           } else if (a.type === ChannelType.GuildText && (b.type === ChannelType.GuildVoice || b.type === ChannelType.GuildStageVoice)) {
             return -1;
           }
-
           return a.position! - b.position!
         } ) 
       })
 
-      setCategoryChannels(categoryChannelMap);
-      console.log(categoryChannelMap);
+      setCategoryChannels(rootChannelList.sort((a, b) => { 
+        if (a.type !== ChannelType.GuildCategory && b.type === ChannelType.GuildCategory) {
+          return -1;
+        } else if (a.type === ChannelType.GuildCategory && b.type !== ChannelType.GuildCategory) {
+          return 1;
+        }
+        return a.rawPosition! - b.rawPosition! 
+      }));
+
       setLoading(false);
     }
   }, [selectedGuild, isLoading])
@@ -110,7 +125,7 @@ export default () => {
     <div className="h-full w-full my-4 flex flex-row">
       <div className="w-80 p-4 h-full box-border border border-slate-300 dark:border-slate-700 scrollbar-base overflow-y-auto overflow-x-hidden box-border border-r border-slate-300 dark:border-slate-700">
       {
-        Object.entries(categoryChannels ?? {}).sort((a, b) => a[1].position! - b[1].position!  ).map(([_, category]) => <CategoryDisplay key={`${category.id}-category-display`} category={category} onChannelClick={handleChannelClick} />)
+        (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem channel={rootChannel} onClick={handleChannelClick} />)
       }
       </div>
       <div className="w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">
