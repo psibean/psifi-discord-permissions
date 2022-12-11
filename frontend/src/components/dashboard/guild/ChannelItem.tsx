@@ -19,20 +19,24 @@ export default ({ channel, onClick }: ChannelItemProps) => {
   const selectedChannel = useSelectedChannel();
   const selectedGuildChannel = useSelectedGuildChannel(channel.id);
   const calculatedChannelPermissions = useCalculatedMemberPermissionsForChannel(selectedGuildChannel.id);
-  
+
   const locked = 
     (selectedGuildChannel.type === ChannelType.GuildVoice || selectedGuildChannel.type === ChannelType.GuildStageVoice)
     && calculatedChannelPermissions !== undefined
     && !hasPermission(PermissionFlagsBits.Connect, BigInt(calculatedChannelPermissions))
   
+  const isViewable = hasPermission(PermissionFlagsBits.ViewChannel, BigInt(calculatedChannelPermissions));
+  
 
   const handleClick = useCallback(() => {
-    onClick(channel);
+    if (isViewable)
+      onClick(channel);
   }, [channel])
 
   return (<div 
     className={classNames(
-      "flex flex-row w-full align-center items-center cursor-pointer pl-4 mb-1 py-1 text-slate-700 hover:text-slate-900 rounded-sm dark:text-slate-400 dark:hover:text-slate-300 hover:bg-slate-800",
+      "flex flex-row w-full align-center items-center cursor-pointer pl-4 mb-1 py-1 text-slate-700 rounded-sm dark:text-slate-400",
+      isViewable ? "cursor-pointer hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-800" : "cursor-not-allowed",
       selectedChannel.channel?.id === channel.id && "bg-slate-800"
     )}
     onClick={handleClick}  
