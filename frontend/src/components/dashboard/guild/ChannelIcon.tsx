@@ -1,14 +1,16 @@
 import classNames from "classnames";
 import { ChannelType } from "discord-api-types/v10"
-import { CgHashtag, CgMic, CgVolume } from "react-icons/cg";
+import { CgHashtag, CgLock, CgMic, CgVolume } from "react-icons/cg";
 
 export type ChannelIconProps = {
   className?: string;
   type: ChannelType;
+  locked: boolean;
 }
 
-export default ({ className, type }: ChannelIconProps ) => {
+export default ({ className, locked, type }: ChannelIconProps ) => {
   const parsedClassName = classNames(className && className);
+  if (locked) return <CgLock className={parsedClassName} />
   switch (type) {
     case ChannelType.GuildStageVoice:
       return <CgVolume className={parsedClassName} />
