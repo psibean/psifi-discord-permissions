@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { useSelectedGuild } from "../../state/selectedGuild.slice";
 import { fetchGuild } from "../../util/api";
@@ -36,7 +36,8 @@ export default () => {
   const [categoryChannels, setCategoryChannels] = useState(null as (SelectedGuildCategory | SelectedGuildChannel)[] | null);
   const [availablePermissions, setAvailablePermissions] = useState(null as PsifiPermission[] | null);
 
-  const handleChannelClick = useCallback((channel: SelectedGuildChannel) => {
+
+  const availablePermissionsHandler = useMemo(() => (channel: SelectedGuildChannel) => {
     switch (channel.type) {
       case ChannelType.GuildText:
         setAvailablePermissions(textChannelPermissions);
@@ -47,6 +48,10 @@ export default () => {
       default:
         setAvailablePermissions(serverPermissions);
     }
+  }, [])
+
+  const handleChannelClick = useCallback((channel: SelectedGuildChannel) => {
+    availablePermissionsHandler(channel);
     dispatch(selectChannel(channel));
   }, [])
   
@@ -68,6 +73,10 @@ export default () => {
       loadGuild();
     }
 
+    if (selectedChannel.channel !== null && availablePermissions === null) {
+      availablePermissionsHandler(selectedChannel.channel);
+    }
+    
     if (!isLoading && selectedGuild.guild !== null) {
       const channelList = Object.values(selectedGuild.channels);
       const categoryChannelMap: CategoryChannelMap = {};
@@ -109,12 +118,11 @@ export default () => {
         }
         return a.rawPosition! - b.rawPosition! 
       }));
-
       setLoading(false);
     }
-  }, [selectedGuild, isLoading])
+  }, [selectedGuild, availablePermissions, isLoading])
 
-  if (isLoading) return <Loading text="Loading guild..." />
+  if (isLoading || (selectedChannel.channel !== null && availablePermissions === null)) return <Loading text="Loading guild..." />
 
   if (!isLoading && selectedGuild.guild === null) {
     navigate(CLIENT_ROUTES.DASHBOARD.GUILDS);
