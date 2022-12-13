@@ -19,12 +19,11 @@ export default ({ channel, onClick }: ChannelItemProps) => {
   const selectedChannel = useSelectedChannel();
   const selectedGuildChannel = useSelectedGuildChannel(channel.id);
   const calculatedChannelPermissions = useCalculatedMemberPermissionsForChannel(selectedGuildChannel.id);
-
   const locked = 
     (selectedGuildChannel.type === ChannelType.GuildVoice || selectedGuildChannel.type === ChannelType.GuildStageVoice)
     && calculatedChannelPermissions !== undefined
     && !hasPermission(PermissionFlagsBits.Connect, BigInt(calculatedChannelPermissions))
-  
+
   const isViewable = hasPermission(PermissionFlagsBits.ViewChannel, BigInt(calculatedChannelPermissions));
   
 
@@ -35,8 +34,8 @@ export default ({ channel, onClick }: ChannelItemProps) => {
 
   return (<div 
     className={classNames(
-      "flex flex-row w-full align-center items-center cursor-pointer pl-4 mb-1 py-1 text-slate-700 rounded-sm dark:text-slate-400",
-      isViewable ? "cursor-pointer hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-800" : "cursor-not-allowed",
+      "flex flex-row w-full group align-center items-center cursor-pointer pl-4 mb-1 py-1 text-slate-700 rounded-sm dark:text-slate-400",
+      isViewable ? "cursor-pointer hover:bg-slate-800" : "cursor-not-allowed",
       selectedChannel.channel?.id === channel.id && "bg-slate-800"
     )}
     onClick={handleClick}  
@@ -46,6 +45,8 @@ export default ({ channel, onClick }: ChannelItemProps) => {
       className={
         classNames(
           "text-ellipsis whitespace-nowrap text-lg overflow-hidden",
+          isViewable && "group-hover:text-slate-900 dark:group-hover:text-slate-300",
+          !isViewable && "line-through",  
           selectedChannel.channel?.id === channel.id && "text-white"
         )}
         title={channel.name}>
