@@ -13,17 +13,6 @@ export type SideNavigationProps = {
   banner?: string;
   displayName: string;
 }
-
-const accountItems = [
-  {
-    label: "Account",
-    path: "/dashboard/user/account"
-  },
-  {
-    label: "Settings",
-    path: "/dashboard/user/settings"
-  }
-]
  
 export const SideNavigation = () => {
   const selectedGuild = useSelectedGuild();
@@ -31,12 +20,6 @@ export const SideNavigation = () => {
     <NavigationHeader />
     <SelectedGuild />
     { selectedGuild.guild && <SimulatedMemberRoles />}
-    <div className="flex flex-col max-h-full overflow-y-auto">
-      <ul className="box-content pl-6">
-        <RolesAndPermissionsMenu />
-        <SubMenu title="User" items={accountItems} />
-      </ul>
-    </div>
-      <LogoutButton />
+    <LogoutButton />
   </aside>;
 }

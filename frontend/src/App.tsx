@@ -20,10 +20,6 @@ const router = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-        path: CLIENT_ROUTES.DASHBOARD.CHANNEL_OVERWRITES,
-        element: <ChannelPermissionOverwrites />
-      },
-      {
         path: CLIENT_ROUTES.DASHBOARD.GUILD,
         element: <Guild />
       },
@@ -31,14 +27,6 @@ const router = createBrowserRouter([
         path: CLIENT_ROUTES.DASHBOARD.GUILDS,
         element: <Guilds />
       },
-      {
-        path: CLIENT_ROUTES.DASHBOARD.USER.ACCOUNT,
-        element: <Account />
-      },
-      {
-        path: CLIENT_ROUTES.DASHBOARD.USER.SETTINGS,
-        element: <Settings />
-      }
     ]
   },
   {
