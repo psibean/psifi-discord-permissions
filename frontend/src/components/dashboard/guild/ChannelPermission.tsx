@@ -41,7 +41,7 @@ const PermissionStatus = ({ enabled }: PermissionStatusProps) => {
 }
 
 export default ({ permission, enabled}: ChannelPermissionProps) => {
-  return (<div className="m-auto max-w-4xl mx-auto box-border flex flex-row justify-between pb-4 mx-4 first:mt-0 mt-4 border-b border-slate-300 dark:border-slate-700">
+  return (<div className="m-auto max-w-4xl mx-auto box-border flex flex-row justify-between pb-4 first:mt-0 mt-4 border-b border-slate-300 dark:border-slate-700">
       <div className="flex flex-col">
         <div className="font-bold text-lg">{ permission.name }</div>
         <div>{ permission.description }</div>
