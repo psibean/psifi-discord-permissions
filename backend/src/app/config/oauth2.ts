@@ -6,7 +6,7 @@ const {
   confirmAuthorization,
   oauth2
 } = OAuth2PKCE({
-  scopes: ['identify'],
+  scopes: ['identify', 'guilds'],
   oauthClientOptions: {
     authorizeUrl:  "/oauth2/authorize",
     baseUrl: "https://discord.com",
