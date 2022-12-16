@@ -7,7 +7,9 @@ import GuildInviteRedirectHandler from './pages/dashboard/GuildInviteRedirectHan
 import Guilds from './pages/dashboard/Guilds'
 import Settings from './pages/dashboard/Settings'
 import DiscordLogin from './pages/DiscordLogin'
-import Home from './pages/Home'
+import Home from './pages/home/Home'
+import TermsOfService from './pages/home/TermsOfService'
+import Root from './pages/Root'
 import { CLIENT_ROUTES } from './util/constants'
 
 const router = createBrowserRouter([
@@ -35,7 +37,21 @@ const router = createBrowserRouter([
   },
   {
     path: CLIENT_ROUTES.ROOT,
-    element: <Home />
+    element: <Root />,
+    children: [
+      {
+        path: CLIENT_ROUTES.TOS,
+        element: <TermsOfService />
+      },
+      {
+        path: CLIENT_ROUTES.PRIVACY,
+        element: CLIENT_ROUTES.PRIVACY
+      },
+      {
+        path: CLIENT_ROUTES.ROOT,
+        element: <Home />
+      }
+    ]
   }
 ])
 

@@ -34,8 +34,8 @@ export default () => {
   if (!isLoading && profile === null)
     navigate("/");
     
-  return isLoading ? <Loading text="Loading..." /> : <>
+  return isLoading ? <Loading text="Loading..." /> : <div className='flex flex-row flex-start min-h-screen max-h-screen h-screen w-screen box-border overflow-hidden'>
     <SideNavigation />
     <Outlet />
-  </>
+  </div>
 }

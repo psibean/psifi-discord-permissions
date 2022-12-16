@@ -22,7 +22,9 @@ export const CLIENT_ROUTES = {
       SETTINGS: "user/settings",
     }
   },
+  PRIVACY: "/privacy",
   ROOT: "/",
+  TOS: "/terms-of-service"
 }
 
 const DISCORD_GUILDS = "/discord/guilds";
