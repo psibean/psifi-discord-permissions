@@ -67,8 +67,6 @@ export const fetchUserData = (dispatch: Dispatch) => {
 export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
   try {
     const selectedGuild = await authenticatedGetJson<SelectedGuild>(API_ROUTES.GUILD(guildId));
-    console.log("GUILD DATA: ");
-    console.log(selectedGuild);
     const initialChannels: SimulatedChannels = {};
     for (const [channelId, selectedGuildChannel] of Object.entries(selectedGuild.channels)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

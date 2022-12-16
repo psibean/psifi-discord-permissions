@@ -20,10 +20,7 @@ export default () => {
 
     const handleLogin = async () => {
       try {
-        console.log("handleLogin()")
         const discordUserData = await authenticatedPost<DiscordUserData>(`/auth/discord/login?code=${code}&state=${state}`);
-        console.log("LOGIN RES:");
-        console.log(discordUserData);
         dispatch(login(discordUserData!));
         navigate('/dashboard/guilds');
       } catch (error) {

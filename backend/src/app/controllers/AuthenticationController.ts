@@ -86,15 +86,11 @@ export default class AuthenticationController {
                 accessToken
             )
             .then((profile) => {
-                console.log("Response for profile:");
-                console.log(profile);
                 return oauth2
                     .getProtectedResource<
                         OAuthGuild[] | OAuth2ProtectedResourceErrorResponse
                     >(`${profileScopeUrl}/guilds`, accessToken)
                     .then((guilds) => {
-                      console.log("Response for guilds");
-                      console.log(guilds);
                       if ("message" in guilds) {
                           throw guilds;
                       } else {

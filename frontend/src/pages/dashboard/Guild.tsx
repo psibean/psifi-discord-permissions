@@ -56,8 +56,6 @@ export default () => {
   }, [])
   
   useEffect(() => {
-    console.log("USE");
-
     if (isLoading) {
       const loadGuild = async () => {
         try {
@@ -130,16 +128,16 @@ export default () => {
 
   return (
     <div className="flex flex-col flex-grow w-4/5 items-center overflow-y-auto px-4 pt-2">
-    <div className="h-full w-full my-4 flex flex-row">
-      <div className="w-80 p-4 h-full box-border border border-slate-300 dark:border-slate-700 scrollbar-base overflow-y-auto overflow-x-hidden box-border border-r border-slate-300 dark:border-slate-700">
-      {
-        (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem channel={rootChannel} onClick={handleChannelClick} />)
-      }
+      <div className="h-full w-full my-4 flex flex-row">
+        <div className="w-80 p-4 h-full box-border border border-slate-300 dark:border-slate-700 scrollbar-base overflow-y-auto overflow-x-hidden box-border border-r border-slate-300 dark:border-slate-700">
+        {
+          (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem channel={rootChannel} onClick={handleChannelClick} />)
+        }
+        </div>
+        <div className="w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">
+          { selectedChannel.channel === null ? <PermissionSimulatorHelp /> : <ChannelPermissions channel={selectedChannel.channel} permissions={availablePermissions!} /> }
+        </div>
       </div>
-      <div className="w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">
-        { selectedChannel.channel === null ? <PermissionSimulatorHelp /> : <ChannelPermissions channel={selectedChannel.channel} permissions={availablePermissions!} /> }
-      </div>
-    </div>
     </div>
   )
 }

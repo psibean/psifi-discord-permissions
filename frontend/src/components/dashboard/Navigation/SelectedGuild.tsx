@@ -28,7 +28,6 @@ export default () => {
     )
   }
 
-  console.log("Rendering Selected Guild...");
   return (
     <>
     <div className="text-sm ml-6 -mb-1">
