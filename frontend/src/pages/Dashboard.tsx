@@ -16,10 +16,8 @@ export type DashboardProps = {
 export default () => {
   const navigate = useNavigate();
   const profile = useProfile();
-  const selectedGuild = useGuild();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(profile === null);
-  const { guildId } = useParams();
 
   useEffect(() => {
     if (isLoading) {
