@@ -15,8 +15,9 @@ import { textChannelPermissions } from "../../permissions/textChannelPermissions
 import { voiceChannelPermissions } from "../../permissions/voiceChannelPermissions";
 import { selectChannel, useSelectedChannel } from "../../state/selectedChannel.slice";
 import { CLIENT_ROUTES } from "../../util/constants";
-import { NOT_LOGGED_IN } from "../../../../psd-types/src/errors";
 import ChannelItem from "../../components/dashboard/guild/ChannelItem";
+import RequestError from "../../util/RequestError";
+import { removeGuild } from "../../state/user.slice";
 
 type CategoryChannelMap = {
   [k: string]: SelectedGuildCategory;
@@ -62,8 +63,16 @@ export default () => {
           await fetchGuild(guildId!, dispatch);
           setLoading(false);
         } catch(error) {
-          if (error instanceof Error && error.message === NOT_LOGGED_IN) {
-            navigate(CLIENT_ROUTES.ROOT);
+          if (error instanceof RequestError) {
+            switch (error.code) {
+              case 401:
+                navigate(CLIENT_ROUTES.ROOT, { relative: 'path' });
+                break;
+              case 403:
+                dispatch(removeGuild(guildId!));
+                navigate(`${CLIENT_ROUTES.DASHBOARD.ROOT}/${CLIENT_ROUTES.DASHBOARD.GUILDS}`, { relative: 'path' });
+                break;
+            }
           }
         }
       }
@@ -131,7 +140,7 @@ export default () => {
       <div className="h-full w-full my-4 flex flex-row">
         <div className="w-80 p-4 h-full box-border border border-slate-300 dark:border-slate-700 scrollbar-base overflow-y-auto overflow-x-hidden box-border border-r border-slate-300 dark:border-slate-700">
         {
-          (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem channel={rootChannel} onClick={handleChannelClick} />)
+          (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem key={`${rootChannel.id}-channel-display`}  channel={rootChannel} onClick={handleChannelClick} />)
         }
         </div>
         <div className="w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">

@@ -4,7 +4,7 @@ import { selectChannel } from '../state/selectedChannel.slice';
 import { SelectedGuild, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
-import { ChannelPermissionOverwrites, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRoles } from '../../../psd-types/src/types';
+import { ChannelPermissionOverwrites, DiscordUserData, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRoles } from '../../../psd-types/src/types';
 import RequestError from './RequestError';
 
 export const get = (url: string, options: RequestInit = {}) => {
@@ -25,9 +25,9 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
 
 export const authenticatedGetJson = async <T extends Record<string, unknown>>(url: string, request: RequestInit = {}) => {
   const requestResponse = await authenticatedGet(url, request);
-  const responseData = await requestResponse.json() as T | { error: { message: string } };
-  if ("error" in responseData) {
-    throw new RequestError(requestResponse.status, (responseData.error as { message: string } ).message);
+  const responseData = await requestResponse.json() as T | { message: string };
+  if ("message" in responseData) {
+    throw new RequestError(requestResponse.status, (responseData as { message: string }).message);
   }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return responseData;
@@ -55,12 +55,8 @@ export const authenticatedPost = async <T extends Record<string, unknown>>(url: 
 }
 
 export const fetchUserData = (dispatch: Dispatch) => {
-  return authenticatedGetJson(API_ROUTES.USER).then(({ status, data }) => {
-    if (status === 200) {
-      dispatch(login(data as UserState));
-    } else {
-      throw data;
-    }
+  return authenticatedGetJson<DiscordUserData>(API_ROUTES.USER).then((data) => {
+    dispatch(login(data as UserState));
   });
 }
 
@@ -98,7 +94,6 @@ export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
       },
     }))
   } catch (error) {
-    dispatch(selectGuild({ guild: null, channels: {} as SelectedGuildChannels , roles: {} as SelectedGuildRoles }));
     if (typeof error === 'string') {
       throw new Error(error);
     }
