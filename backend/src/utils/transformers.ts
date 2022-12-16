@@ -1,4 +1,4 @@
-import { CategoryChannel, Collection, Guild, GuildBasedChannel, Role, StageChannel } from "discord.js";
+import { Collection, Guild, GuildBasedChannel, Role } from "discord.js";
 import { ChannelPermissionOverwrites, ListedGuild, OAuthGuild, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRole, SelectedGuildRoles } from "../../../psd-types/src/types";
 
 export const guildToListedGuild = (guild: Guild): ListedGuild => ({
