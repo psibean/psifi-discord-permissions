@@ -4,6 +4,12 @@ import type { ListedGuild, SelectedGuildRoles, SelectedGuildChannels, SelectedGu
 
 import { PsifiDiscordState } from './store';
 
+export type SelectedGuild = {
+  guild: ListedGuild;
+  roles: SelectedGuildRoles;
+  channels: SelectedGuildChannels;
+}
+
 export type SelectedGuildState = {
   guild: ListedGuild | null;
   roles: SelectedGuildRoles;
@@ -27,7 +33,7 @@ const selectedGuldSlice = createSlice({
 })
 
 export const selectGuild =
- (data: SelectedGuildState) => selectedGuldSlice.actions.selectGuild(data);
+ (data: SelectedGuildState | SelectedGuild) => selectedGuldSlice.actions.selectGuild(data);
 
  export const useSelectedGuild = () => useSelector<PsifiDiscordState, SelectedGuildState>(state => state.selectedGuild);
  export const useSelectedGuildId = () => useSelector<PsifiDiscordState, string | null>(state => state.selectedGuild.guild?.id ?? null)

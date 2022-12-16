@@ -1,7 +1,7 @@
 import type {
   AccessTokenResponse,
   AccessTokenResponsePayload,
-  OAuth2ErrorResponse,
+  OAuth2LoginErrorResponse,
   GetAccessTokenOptions,
   GetAuthorizeUrlOptions,
   OAuth2ClientConfigOptions,
@@ -177,9 +177,9 @@ export default class OAuth2Client {
       headers,
     }).then(async response => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const data = await response.json() as T | OAuth2ErrorResponse;
+      const data = await response.json() as T | OAuth2LoginErrorResponse;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if ("error" in data) {
+      if (typeof data === 'object' && data !== null && "error" in data) {
         throw data;
       }
 

@@ -9,7 +9,7 @@ const authenticationRouter = Router({
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 authenticationRouter.get('/discord/login', (req, res) => authenticationController.authorize(req, res));
-authenticationRouter.post('/discord/login', (req, res) => authenticationController.login(req, res));
+authenticationRouter.post('/discord/login', (req, res, next) => authenticationController.login(req, res, next));
 authenticationRouter.post('/logout', (req, res) => authenticationController.logout(req, res));
 
 export default authenticationRouter;

@@ -58,10 +58,15 @@ export type AuthorizationErrorCode =
   | "unsupported_grant_type"
   | "invalid_scope";
 
-export interface OAuth2ErrorResponse {
+export interface OAuth2LoginErrorResponse {
   error: AuthorizationErrorCode;
   error_description?: string;
   error_uri?: string;
+}
+
+export interface OAuth2ProtectedResourceErrorResponse {
+  code: number;
+  message: string;
 }
 
 export interface AccessTokenRequestPayload {
@@ -89,7 +94,7 @@ export interface AccessTokenResponsePayload extends Record<string, any> {
 }
 
 export type AccessTokenResponse =
-  | OAuth2ErrorResponse
+  | OAuth2LoginErrorResponse
   | AccessTokenResponsePayload;
 
 export type GetAccessTokenReturn = Promise<AccessTokenResponsePayload>;

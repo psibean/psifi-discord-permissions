@@ -1,10 +1,11 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import { setSimulatedServer, SimulatedChannels, SimulatedServerPermissions } from '../state/simulatedServer.slice';
 import { selectChannel } from '../state/selectedChannel.slice';
-import { SelectedGuildState, selectGuild } from '../state/selectedGuild.slice';
+import { SelectedGuild, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
 import { ChannelPermissionOverwrites, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRoles } from '../../../psd-types/src/types';
+import RequestError from './RequestError';
 
 export const get = (url: string, options: RequestInit = {}) => {
   return fetch(url, {
@@ -22,18 +23,21 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
   });
 }
 
-export const authenticatedGetJson = <T>(url: string, request: RequestInit = {}) => {
-  return authenticatedGet(url, request)
+export const authenticatedGetJson = async <T extends Record<string, unknown>>(url: string, request: RequestInit = {}) => {
+  const requestResponse = await authenticatedGet(url, request);
+  const responseData = await requestResponse.json() as T | { error: { message: string } };
+  if ("error" in responseData) {
+    throw new RequestError(requestResponse.status, (responseData.error as { message: string } ).message);
+  }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    .then(res => res.json().then(data => ({ status: res.status, data } as { status: number, data: T }))
-    );
+    return responseData;
 }
 
-export const authenticatedPost = async (url: string, options: RequestInit = {}) => {
+export const authenticatedPost = async <T extends Record<string, unknown>>(url: string, options: RequestInit = {}) => {
   const csrfTokenResponse = await authenticatedGet(API_ROUTES.CSRF_TOKEN);
   const { token } = await csrfTokenResponse.json() as { token: string };
 
-  return fetch(`${PSD_API_URL}${url}`, {
+  const response = await fetch(`${PSD_API_URL}${url}`, {
     ...options,
     headers: {
       ...(options.headers || {}),
@@ -41,7 +45,13 @@ export const authenticatedPost = async (url: string, options: RequestInit = {}) 
     },
     method: 'POST',
     credentials: "include"
-  })
+  });
+
+  const responseData = await response.json() as T;
+  if ("error" in responseData) {
+    throw new RequestError(response.status, (responseData.error as { message: string }).message);
+  }
+  if (response.status === 200) return responseData;
 }
 
 export const fetchUserData = (dispatch: Dispatch) => {
@@ -55,13 +65,12 @@ export const fetchUserData = (dispatch: Dispatch) => {
 }
 
 export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
-  const { status, data } = await authenticatedGetJson<SelectedGuildState | { error: { message: string } }>(API_ROUTES.GUILD(guildId));
-  console.log("GUILD DATA: ");
-  console.log(data);
-  if (status === 200 && "guild" in data && data.guild !== null) {
+  try {
+    const selectedGuild = await authenticatedGetJson<SelectedGuild>(API_ROUTES.GUILD(guildId));
+    console.log("GUILD DATA: ");
+    console.log(selectedGuild);
     const initialChannels: SimulatedChannels = {};
-
-    for (const [channelId, selectedGuildChannel] of Object.entries(data.channels)) {
+    for (const [channelId, selectedGuildChannel] of Object.entries(selectedGuild.channels)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       initialChannels[channelId] = { id: channelId, type: selectedGuildChannel.type, name: selectedGuildChannel.name, overwrites: {}};
       for (const [roleId, roleOverwrites] of Object.entries(selectedGuildChannel.permissionOverwrites)) {
@@ -69,48 +78,42 @@ export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
         (initialChannels[channelId].overwrites as ChannelPermissionOverwrites)[roleId] = roleOverwrites;
       }
     }
-
-    const serverPermissions = Object.values(data.roles).reduce((previous, current) => {
+    const serverPermissions = Object.values(selectedGuild.roles).reduce((previous, current) => {
       previous[current.id] = current.permissions;
       return previous;
     }, {} as SimulatedServerPermissions );
-
+  
     const rolePermissions: Record<string, string> = {};
-    Object.values(data.roles).forEach(role => {
+    Object.values(selectedGuild.roles).forEach(role => {
       rolePermissions[role.id] = role.permissions;
     })
-    
-    dispatch(selectGuild(data));
+      
+    dispatch(selectGuild(selectedGuild));
     dispatch(setSimulatedServer({
-      id: data.guild.id,
-      name: data.guild.name,
+      id: selectedGuild.guild.id,
+      name: selectedGuild.guild.name,
       channels: initialChannels,
       permissions: serverPermissions,
       member: {
         permissions: "0",
-        roles: [data.guild.id]
+        roles: [selectedGuild.guild.id]
       },
     }))
-  } else {
+  } catch (error) {
     dispatch(selectGuild({ guild: null, channels: {} as SelectedGuildChannels , roles: {} as SelectedGuildRoles }));
-    
-    if ("error" in data) {
-      throw new Error(data.error.message);
+    if (typeof error === 'string') {
+      throw new Error(error);
     }
-    else {
-      throw data;
-    }
+    throw error;
   }
 }
 
 export const fetchChannels = (guildId: string) => {
-  return authenticatedGetJson(API_ROUTES.GUILD_CHANNELS(guildId))
+  return authenticatedGetJson<SelectedGuildChannels>(API_ROUTES.GUILD_CHANNELS(guildId));
 }
 
 export const fetchChannel = (guildId: string, channelId: string, dispatch: Dispatch) => {
-  return authenticatedGetJson(API_ROUTES.CHANNEL(guildId, channelId)).then(({ status, data }) => {
-    if (status === 200) {
-      dispatch(selectChannel(data as SelectedGuildChannel));
-    }
+  return authenticatedGetJson<SelectedGuildChannel>(API_ROUTES.CHANNEL(guildId, channelId)).then(selectedGuildChannel => {
+      dispatch(selectChannel(selectedGuildChannel));
   });
 }

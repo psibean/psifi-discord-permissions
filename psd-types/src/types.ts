@@ -124,7 +124,7 @@ export type ChannelPermissionOverwrites = Record<string, ChannelPermissionOverwr
 
 export type SelectedChannelType = ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildCategory | ChannelType.GuildAnnouncement | ChannelType.AnnouncementThread | ChannelType.PublicThread | ChannelType.PrivateThread | ChannelType.GuildStageVoice | ChannelType.GuildForum;
 
-export interface SelectedGuildChannel {
+export type SelectedGuildChannel = {
   id: Snowflake;
   name: string;
   type: SelectedChannelType;
