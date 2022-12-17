@@ -26,18 +26,21 @@ const HomeNavLink = ({ label, to, selected }: HomeNavLinkProps) => {
 
 export default () => {
   return <div className='flex flex-col flex-start min-h-screen max-h-screen h-screen w-screen box-border overflow-hidden'>
-  <div className="w-full text-2xl flex flex-row justify-between items-center align-center p-4 mb-2">
-    <div>
-      Psifi Security: Permissions Simulator
+    <div className="w-full border-b border-slate-400 dark:border-slate-500 xs:text-lg md:text-xl lg:text-2xl flex flex-row justify-between items-center align-center p-4 mb-2">
+      <div className="px-4">
+        Psifi Bot
+      </div>
+      <div className="flex flex-row">
+        <HomeNavLink to={CLIENT_ROUTES.ROOT} label="Home" />
+        <HomeNavLink to={CLIENT_ROUTES.SECURITY} label="Security" />
+        <HomeNavLink to={CLIENT_ROUTES.TOS} label="Terms of Service" />
+        <HomeNavLink to={CLIENT_ROUTES.PRIVACY} label="Privacy Policy" />
+      </div>
     </div>
-    <div className="flex flex-row">
-      <HomeNavLink to={CLIENT_ROUTES.ROOT} label="Home" />
-      <HomeNavLink to={CLIENT_ROUTES.TOS} label="Terms of Service" />  
-      <HomeNavLink to={CLIENT_ROUTES.PRIVACY} label="Privacy Policy" />
-    </div>
-  </div>
-    <div className="container mx-auto px-4">
-      <Outlet />
+    <div className="w-full px-4 overflow-auto">
+      <div className="max-w-4xl mx-auto py-8">
+        <Outlet />
+      </div>
     </div>
   </div>
 }

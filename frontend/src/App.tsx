@@ -1,13 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
-import Account from './pages/dashboard/Account'
-import ChannelPermissionOverwrites from './pages/dashboard/ChannelPermissionOverwrites'
 import Guild from './pages/dashboard/Guild'
 import GuildInviteRedirectHandler from './pages/dashboard/GuildInviteRedirectHandler'
 import Guilds from './pages/dashboard/Guilds'
-import Settings from './pages/dashboard/Settings'
 import DiscordLogin from './pages/DiscordLogin'
 import Home from './pages/home/Home'
+import PrivacyPolicy from './pages/home/PrivacyPolicy'
+import Security from './pages/home/Security'
 import TermsOfService from './pages/home/TermsOfService'
 import Root from './pages/Root'
 import { CLIENT_ROUTES } from './util/constants'
@@ -45,7 +44,11 @@ const router = createBrowserRouter([
       },
       {
         path: CLIENT_ROUTES.PRIVACY,
-        element: CLIENT_ROUTES.PRIVACY
+        element: <PrivacyPolicy />
+      },
+      {
+        path: CLIENT_ROUTES.SECURITY,
+        element: <Security />
       },
       {
         path: CLIENT_ROUTES.ROOT,

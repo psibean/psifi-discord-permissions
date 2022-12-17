@@ -24,6 +24,7 @@ export const CLIENT_ROUTES = {
   },
   PRIVACY: "/privacy",
   ROOT: "/",
+  SECURITY: "/security",
   TOS: "/terms-of-service"
 }
 
