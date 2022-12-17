@@ -21,25 +21,25 @@ export default () => {
         Collected data refers to data that is used but is not saved, stored, or persisted, the data is only used throughout the runtime of the application. Collected data may also be stored data.
       </Paragraph>
       <Paragraph>
-        Psifi Bot collects data permitted by you in accordance with the <Anchor target="_blank" href="https://discord.com/developers/docs/policies-and-agreements/developer-terms-of-service#discord-developer-terms-of-service">Discord Developer Terms of Service</Anchor>. The collected data is provided to Psifi Bot by Discord only with your authorizing permission, either by signing in to the Psifi Bot dashboard or by inviting Psifi Bot to your server.
+        Psifi Bot collects data permitted by you in accordance with the <Anchor href="https://discord.com/developers/docs/policies-and-agreements/developer-terms-of-service#discord-developer-terms-of-service">Discord Developer Terms of Service</Anchor>. The collected data is provided to Psifi Bot by Discord only with your authorizing permission, either by signing in to the Psifi Bot dashboard or by inviting Psifi Bot to your server.
       </Paragraph>
       <Paragraph>
         Collected data, consists of:
       </Paragraph>
       <UnorderedList>
         <ListItem>
-          Server information such as the id, name, icon, banner, and permissions of a particular user as <a target="_blank" href=" zx  ">found here</a>.
+          Server information such as the id, name, icon, banner, and permissions of a particular user as <Anchor href="https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild">found here</Anchor>.
           This information will only be accessible by server owners, any members with the Administrator permission, and any other members who have been permitted access by the server owner, regardless of whether or not Psifi Bot is in the server.
         </ListItem>
         <ListItem>
-          Server information such as the server roles, channel information, other configuration settings as <Anchor target="_blank" href="https://discord.com/developers/docs/resources/guild">found here</Anchor>.
+          Server information such as the server roles, channel information, other configuration settings as <Anchor href="https://discord.com/developers/docs/resources/guild">found here</Anchor>.
           This information will only be accessible by server owners, any members with the Administrator permission, and any other members who have been permitted access by the server owner, so long as Psifi Bot is a member of the server.
         </ListItem>
         <ListItem>
-          Server member information for all members on your server as <Anchor target="_blank" href="https://discord.com/developers/docs/resources/guild#guild-member-object">found here</Anchor>.
+          Server member information for all members on your server as <Anchor href="https://discord.com/developers/docs/resources/guild#guild-member-object">found here</Anchor>.
         </ListItem>
         <ListItem>
-          When logging in to the dashboard, user information relating to the authenticated user such as id, username, descriptor, avatar, banner, and other user specific settings, the servers they are in and their permissions within those servers as <a href="https://discord.com/developers/docs/resources/user#user-object">found here</a>.
+          When logging in to the dashboard, user information relating to the authenticated user such as id, username, descriptor, avatar, banner, and other user specific settings, the servers they are in and their permissions within those servers as <Anchor href="https://discord.com/developers/docs/resources/user#user-object">found here</Anchor>.
         </ListItem>
       </UnorderedList>
       <Paragraph>Collected data is used for the sole purpose of providing you the features and services that Psifi Bot provides.</Paragraph>
