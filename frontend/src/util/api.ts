@@ -4,7 +4,7 @@ import { selectChannel } from '../state/selectedChannel.slice';
 import { SelectedGuild, selectGuild } from '../state/selectedGuild.slice';
 import { login, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
-import { ChannelPermissionOverwrites, DiscordUserData, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRoles } from '../../../psd-types/src/types';
+import { ChannelPermissionOverwrites, DiscordUserData, SelectedGuildChannel, SelectedGuildChannels } from '../../../psd-types/src/types';
 import RequestError from './RequestError';
 
 export const get = (url: string, options: RequestInit = {}) => {
