@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 
 export const BaseSimulatorPageHeader = ({ children }: PropsWithChildren) => {
-  return <div className="bg-white border-b border-slate-300 dark:border-slate-700 dark:bg-slate-900 py-2 font-bold text-center text-3xl">
+  return <div className="bg-white h-14 border-b border-slate-300 dark:border-slate-700 dark:bg-slate-900 py-2 font-bold text-center text-3xl">
     { children }
   </div>
 }
