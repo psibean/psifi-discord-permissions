@@ -23,7 +23,7 @@ export default () => {
           Please report any potential bugs or problems via the <Anchor href="https://psifisolutions.com/discord">Psifi Solutions Discord Server</Anchor>, or directly to Psi#2741.
         </Paragraph>
       </div>
-        <a className="text-center block" href={`${PSD_API_URL}/auth/discord/login`}>
+        <a className="text-center block text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300" href={`${PSD_API_URL}/auth/discord/login`}>
           <SiDiscord className="inline w-20 h-20" /><br />
           Discord Login
         </a>
@@ -42,9 +42,6 @@ export default () => {
           </ListItem>
           <ListItem>
             The ability to, in addition to the previous point, save the changes you make directly to your server.
-          </ListItem>
-          <ListItem>
-            Maybe (depending on Discord rate limits): the ability to download a backup of your servers roles and permissions such that you can re-upload it to restore your server back to the way it was!
           </ListItem>
         </UnorderedList>
     </>
