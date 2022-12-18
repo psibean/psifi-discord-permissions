@@ -21,7 +21,7 @@ const selectedChannelslice = createSlice({
 })
 
 export const selectChannel =
- (data: SelectedGuildChannel) => selectedChannelslice.actions.selectChannel(data);
+ (data: SelectedGuildChannel | null) => selectedChannelslice.actions.selectChannel(data);
 
  export const useSelectedChannel = () => useSelector<PsifiDiscordState, SelectedChannelState>(state => state.selectedChannel);
  export default selectedChannelslice.reducer;

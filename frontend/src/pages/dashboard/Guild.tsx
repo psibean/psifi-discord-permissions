@@ -18,6 +18,7 @@ import { CLIENT_ROUTES } from "../../util/constants";
 import ChannelItem from "../../components/dashboard/guild/ChannelItem";
 import RequestError from "../../util/RequestError";
 import { removeGuild } from "../../state/user.slice";
+import { BiHelpCircle } from "react-icons/bi";
 
 type CategoryChannelMap = {
   [k: string]: SelectedGuildCategory;
@@ -36,7 +37,11 @@ export default () => {
   const [isLoading, setLoading] = useState(true);
   const [categoryChannels, setCategoryChannels] = useState(null as (SelectedGuildCategory | SelectedGuildChannel)[] | null);
   const [availablePermissions, setAvailablePermissions] = useState(null as PsifiPermission[] | null);
+  const [isHelpOpen, setHelpOpen] = useState(true);
 
+  const handleHelpClick = useCallback(() => {
+    setHelpOpen(!isHelpOpen);
+  }, [isHelpOpen])
 
   const availablePermissionsHandler = useMemo(() => (channel: SelectedGuildChannel) => {
     switch (channel.type) {
@@ -54,8 +59,17 @@ export default () => {
   const handleChannelClick = useCallback((channel: SelectedGuildChannel) => {
     availablePermissionsHandler(channel);
     dispatch(selectChannel(channel));
+    if (isHelpOpen)
+      setHelpOpen(false);
   }, [])
   
+  useEffect(() => {
+    if (selectedChannel.channel !== null) {
+      console.log("Setting channel to null");
+      selectChannel(null);
+    }
+  }, [])
+
   useEffect(() => {
     if (isLoading) {
       const loadGuild = async () => {
@@ -136,15 +150,16 @@ export default () => {
   }
 
   return (
-    <div className="flex flex-col flex-grow w-4/5 items-center overflow-y-auto px-4 pt-2">
-      <div className="h-full w-full my-4 flex flex-row">
+    <div className="relative select-none flex flex-col flex-grow w-4/5 items-center overflow-y-auto px-4 pt-2">
+      <div className="relative h-full w-full my-4 flex flex-row">
         <div className="w-80 p-4 h-full box-border border border-slate-300 dark:border-slate-700 scrollbar-base overflow-y-auto overflow-x-hidden box-border border-r border-slate-300 dark:border-slate-700">
         {
           (categoryChannels ?? []).map((rootChannel) => rootChannel.type === ChannelType.GuildCategory ? <CategoryDisplay key={`${rootChannel.id}-category-display`} category={rootChannel} onChannelClick={handleChannelClick} /> : <ChannelItem key={`${rootChannel.id}-channel-display`}  channel={rootChannel} onClick={handleChannelClick} />)
         }
         </div>
-        <div className="w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">
-          { selectedChannel.channel === null ? <PermissionSimulatorHelp /> : <ChannelPermissions channel={selectedChannel.channel} permissions={availablePermissions!} /> }
+        <div className="relative w-full h-full overflow-hidden box-border border-t border-b border-r border-slate-300 dark:border-slate-700">
+          { selectedChannel.channel !== null && <BiHelpCircle onClick={handleHelpClick} className="absolute h-8 w-8 top-4 -mt-1 right-4 cursor-pointer text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300" /> }
+          { selectedChannel.channel === null || isHelpOpen ? <PermissionSimulatorHelp /> : <ChannelPermissions channel={selectedChannel.channel} permissions={availablePermissions!} /> }
         </div>
       </div>
     </div>
