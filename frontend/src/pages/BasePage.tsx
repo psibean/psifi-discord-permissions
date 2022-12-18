@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+import HeaderOne from '../components/common/HeaderOne';
 
 
 export type BasePageProps = PropsWithChildren<{
@@ -7,8 +8,8 @@ export type BasePageProps = PropsWithChildren<{
 
 export default ({ title, children }: BasePageProps) => (
   <div className="flex flex-col flex-grow w-4/5 items-center overflow-y-auto px-4 pt-12">
-    <div className="text-4xl font-medium">
+    <HeaderOne>
       { title }
-    </div>
+    </HeaderOne>
     { children }
   </div>)
