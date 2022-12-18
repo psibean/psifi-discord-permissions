@@ -9,6 +9,8 @@ import {
 import InviteGuildCard from "../../components/dashboard/GuildCard/InviteGuildCard";
 import { useNavigate } from "react-router-dom";
 import BasePage from "../BasePage";
+import Paragraph from "../../components/common/Paragraph";
+import HeaderTwo from "../../components/common/HeaderTwo";
 // import { TbRefreshDot } from 'react-icons/tb';
 
 export default () => {
@@ -71,16 +73,12 @@ export default () => {
 
     return (
         <BasePage title="Select a server">
-           { guilds.length === 0 ? <div className="mt-4 text-center">
-            <h3 className="text-2xl font-medium">Whoops! It doesn't look like there's any servers here!</h3>
-            <p className="text-xl">You will need to own or administrate a server to see it here.</p>
-            <p>For now, refreshing the page will only update for guilds the bot is in.</p>
-            <p>To update this page with guilds that you now own or administrate, please logout and log back in.</p>
-            <p>For now, this is for simpler and more secure handling of the login process.</p>
-            {/* <div className="flex flex-col items-center align-center hover:cursor-pointer">
-                <TbRefreshDot className="h-16 w-16" />
-                <span className="block">Refresh</span>
-            </div> */}
+           { guilds.length === 0 ? <div className="text-center">
+            <HeaderTwo>Whoops! It doesn't look like there's any servers here!</HeaderTwo>
+            <Paragraph>You will need to own or administrate a server to see it here.</Paragraph>
+            <Paragraph>For now, refreshing the page will only update for guilds the bot is in.</Paragraph>
+            <Paragraph>To update this page with guilds that you now own or administrate, please logout and log back in.</Paragraph>
+            <Paragraph>For now, this is for simpler and more secure handling of the login process.</Paragraph>
            </div> :
             <div className="flex flex-row flex-wrap justify-center mx-auto">
                 {guilds &&
