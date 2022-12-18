@@ -1,5 +1,5 @@
 
-export const PSD_API_URL = `http://localhost:4450`;
+export const PSD_API_URL = `/api`;
 export const PSD_FRONTEND_URL = `http://localhost:5173`;
 export const PSD_CLIENT_ID = "643569569176223744";
 export const AUTHORIZE_URL = "https://discord.com/oauth2/authorize";
