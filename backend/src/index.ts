@@ -8,6 +8,6 @@ process.on('uncaughtException', logger.error);
 
 const server = express();
 
-const app = new DiscordSecurityApp(botClient, server);
+const app = new DiscordSecurityApp(botClient, logger, server);
 
 await app.start(PORT);

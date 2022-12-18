@@ -15,6 +15,7 @@ import {
 } from "../config/oauth2/types.js";
 import { buildDiscordResourceUrl } from "../../utils/transformers";
 import createHttpError from "http-errors";
+import { Logger } from "pino";
 
 export type PassportDiscordOAuthHandler = (
     error: Error | string | undefined | null,
@@ -22,6 +23,12 @@ export type PassportDiscordOAuthHandler = (
 ) => void;
 
 export default class AuthenticationController {
+    private logger: Logger;
+
+    public constructor(logger: Logger) {
+        this.logger = logger.child({ loggerName: "AuthenticationController" });
+    }
+
     public authorize(req: Request, res: Response) {
         authorize(req, res);
     }
@@ -46,7 +53,7 @@ export default class AuthenticationController {
                         | Error
                         | string
                 ) => {
-                    logger.error(error);
+                    this.logger.error(error);
                     if (typeof error === "string") {
                         res.status(500);
                         next(createHttpError(500, error));
@@ -72,7 +79,7 @@ export default class AuthenticationController {
         delete req.session.state;
 
         req.session.regenerate((error: Error | null | undefined) => {
-            if (error) logger.error(error);
+            if (error) this.logger.error(error);
             res.sendStatus(200);
         });
     }

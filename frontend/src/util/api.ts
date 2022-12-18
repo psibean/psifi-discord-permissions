@@ -33,11 +33,11 @@ export const authenticatedGetJson = async <T extends Record<string, unknown>>(ur
     return responseData;
 }
 
-export const authenticatedPost = async <T extends Record<string, unknown>>(url: string, options: RequestInit = {}) => {
+export const authenticatedPost = async (url: string, options: RequestInit = {}) => {
   const csrfTokenResponse = await authenticatedGet(API_ROUTES.CSRF_TOKEN);
   const { token } = await csrfTokenResponse.json() as { token: string };
 
-  const response = await fetch(`${PSD_API_URL}${url}`, {
+  return fetch(`${PSD_API_URL}${url}`, {
     ...options,
     headers: {
       ...(options.headers || {}),
@@ -46,7 +46,10 @@ export const authenticatedPost = async <T extends Record<string, unknown>>(url: 
     method: 'POST',
     credentials: "include"
   });
+}
 
+export const authenticatedPostJson = async <T extends Record<string, unknown>>(url: string, options: RequestInit = {}) => {
+  const response = await authenticatedPost(url, options);
   const responseData = await response.json() as T;
   if ("error" in responseData) {
     throw new RequestError(response.status, (responseData.error as { message: string }).message);
@@ -56,6 +59,8 @@ export const authenticatedPost = async <T extends Record<string, unknown>>(url: 
 
 export const fetchUserData = (dispatch: Dispatch) => {
   return authenticatedGetJson<DiscordUserData>(API_ROUTES.USER).then((data) => {
+    console.log("Got profile:");
+    console.log(data);
     dispatch(login(data as UserState));
   });
 }

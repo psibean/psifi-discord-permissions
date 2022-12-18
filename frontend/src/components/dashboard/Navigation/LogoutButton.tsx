@@ -18,7 +18,7 @@ export default () => {
 
   return (
     <div className="w-full text-center mt-8 ">
-    <button className="px-4 py-2 font-semibold text-sm bg-red-500 text-white rounded-sm shadow-sm" onClick={logout}>Logout</button>
+      <button className="px-4 py-2 font-semibold text-sm bg-red-500 text-white rounded-sm shadow-sm" onClick={logout}>Logout</button>
     </div>
   )
 }

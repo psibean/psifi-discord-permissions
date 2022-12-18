@@ -14,14 +14,17 @@ import { guildRepository } from '../database/repositories/GuildRepository.js';
 import prisma from '../database/db.js';
 import user from './middleware/user.js';
 import { guildToListedGuild } from '../utils/transformers.js';
+import { Logger } from 'pino';
 
 
 export default class DiscordSecurityApp {
   public server: ReturnType<typeof express>;
   public botClient: Client
+  private logger: Logger;
 
-  public constructor(botClient: Client, server: ReturnType<typeof express>) {
+  public constructor(botClient: Client, logger: Logger, server: ReturnType<typeof express>) {
     this.botClient = botClient;
+    this.logger = logger.child({ loggerName: "DiscordSecurityApp" });
     this.server = server;
     this.server.use(express.urlencoded({ extended: false }));
     this.server.use(express.json({ }))
@@ -59,7 +62,7 @@ export default class DiscordSecurityApp {
           }
         }
       } catch(error) {
-        logger.error(error);
+        this.logger.error(error);
       }
     })
     
@@ -75,7 +78,7 @@ export default class DiscordSecurityApp {
         }
         void guildRepository.deleteGuildSettings(guild);
       } catch(error) {
-        logger.error(error);
+        this.logger.error(error);
       }
     }
     
@@ -114,7 +117,7 @@ export default class DiscordSecurityApp {
           }
         }
       } catch(error) {
-        logger.error(error);
+        this.logger.error(error);
       }
     })
   }

@@ -49,7 +49,7 @@ export default ({ channel, onClick }: ChannelItemProps) => {
           !isViewable && "line-through",  
           selectedChannel.channel?.id === channel.id && "text-white"
         )}
-        title={channel.name}>
+        title={isViewable ? '' : "Unable to view " + channel.name}>
           { channel.name }
     </div>
   </div>)

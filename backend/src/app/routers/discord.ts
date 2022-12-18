@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import logger from '../../utils/logger.js';
 import DiscordController from '../controllers/DiscordController.js';
 import guildAccess from '../middleware/guildAccess.js';
 
@@ -6,7 +7,7 @@ const discordRouter = Router({
   caseSensitive: false
 });
 
-const discordController = new DiscordController();
+const discordController = new DiscordController(logger);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 discordRouter.post('/guilds', (req, res, next) => discordController.getGuilds(req, res, next));

@@ -10,7 +10,7 @@ export type ChannelIconProps = {
 
 export default ({ className, locked, type }: ChannelIconProps ) => {
   const parsedClassName = classNames(className && className);
-  if (locked) return <CgLock title={`Locked ${type === ChannelType.GuildVoice ? 'Voice Channel' : "Stage Channel"} CHannel`} className={parsedClassName} />
+  if (locked) return <CgLock title={`Locked ${type === ChannelType.GuildVoice ? 'Voice' : "Stage"} Ckannel`} className={parsedClassName} />
   switch (type) {
     case ChannelType.GuildStageVoice:
       return <CgVolume title="Stage Channel" className={parsedClassName} />

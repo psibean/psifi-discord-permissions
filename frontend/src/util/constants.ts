@@ -35,5 +35,5 @@ export const API_ROUTES = {
   GUILD: (guildId: string) => `${DISCORD_GUILDS}/${guildId}`,
   GUILD_CHANNELS: (guildId: string) => `${DISCORD_GUILDS}/${guildId}/channels`,
   CHANNEL: (guildId: string, channelId: string) => `${DISCORD_GUILDS}/${guildId}/channels/${channelId}`,
-  USER: "/api/users/@me"
+  USER: "/users/@me"
 }

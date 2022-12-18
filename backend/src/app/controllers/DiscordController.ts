@@ -5,8 +5,14 @@ import logger from "../../utils/logger.js";
 import botClient from "../../bot/bot.js";
 import { buildSelectedChannels, buildSelectedRoles, channelToChannelWithOverwrites, guildToListedGuild } from "../../utils/transformers.js";
 import { CHANNELS_INTERNAL_ERROR, CHANNEL_INTERNAL_ERROR, CHANNEL_NOT_FOUND, GUILDS_INTERNAL_ERROR, GUILD_INTERNAL_ERROR, GUILD_NOT_FOUND, ROLES_INTERNAL_ERROR } from "../../../../psd-types/src/errors.js";
+import { Logger } from "pino";
 
 export default class DiscordController {
+  private logger: Logger;
+
+  public constructor(logger: Logger) {
+    this.logger = logger.child({ loggerName: "DiscordController" });
+  }
 
   public async getGuild(req: Request, res: Response, next: NextFunction) {
     try {
@@ -19,7 +25,7 @@ export default class DiscordController {
         roles: buildSelectedRoles(roles)
       });
     } catch(error) {
-      logger.error(error);
+      this.logger.error(error);
       next(createHttpError(500, GUILD_INTERNAL_ERROR));
     }
   }
@@ -40,7 +46,7 @@ export default class DiscordController {
         guilds: accessibleGuilds.map(guild => guildToListedGuild(guild))
       });
     } catch (error) {
-      logger.error(error);
+      this.logger.error(error);
       next(createHttpError(500, GUILDS_INTERNAL_ERROR));
     }
   }
@@ -51,7 +57,7 @@ export default class DiscordController {
 
       return res.status(200).json({ roles: guild.roles.cache.values() });
     } catch(error) {
-      logger.error(error);
+      this.logger.error(error);
       next(createHttpError(500, ROLES_INTERNAL_ERROR))
     }
   }
@@ -62,7 +68,7 @@ export default class DiscordController {
       return res.status(200).json( 
         guild.channels.cache.map(channelToChannelWithOverwrites))
     } catch(error) {
-      logger.error(error);
+      this.logger.error(error);
       if (typeof error === 'string') {
         next(createHttpError(500, CHANNELS_INTERNAL_ERROR));
       } else {
@@ -81,7 +87,7 @@ export default class DiscordController {
 
       res.status(200).json(channelToChannelWithOverwrites(channel));
     } catch(error) {
-      logger.error(error);
+      this.logger.error(error);
       if (typeof error === 'string') 
         next(createHttpError(500, CHANNEL_INTERNAL_ERROR));
       else

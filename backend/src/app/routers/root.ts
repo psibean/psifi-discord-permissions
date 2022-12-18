@@ -19,7 +19,7 @@ rootRouter.use('/auth', authenticationRouter);
 
 rootRouter.use(authenticated);
 
-rootRouter.use('/api/users/@me', (req: Request, res: Response) => {
+rootRouter.use('/users/@me', (req: Request, res: Response) => {
   res.status(200).json(req.user?.data() ?? {});
 })
 

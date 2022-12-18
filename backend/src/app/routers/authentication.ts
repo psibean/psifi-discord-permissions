@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import logger from '../../utils/logger.js';
 import AuthenticationController from '..//controllers/AuthenticationController.js';
 
-const authenticationController = new AuthenticationController();
+const authenticationController = new AuthenticationController(logger);
 
 const authenticationRouter = Router({
   caseSensitive: false

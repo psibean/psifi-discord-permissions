@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { login } from "../state/user.slice.js";
 import { DiscordUserData } from "../../../psd-types/src/types.js";
 import Loading from "../components/util/Loading.js";
-import { authenticatedPost, fetchUserData } from "../util/api.js";
+import { authenticatedPostJson } from "../util/api.js";
 import RequestError from "../util/RequestError.js";
 
 
@@ -20,7 +20,7 @@ export default () => {
 
     const handleLogin = async () => {
       try {
-        const discordUserData = await authenticatedPost<DiscordUserData>(`/auth/discord/login?code=${code}&state=${state}`);
+        const discordUserData = await authenticatedPostJson<DiscordUserData>(`/auth/discord/login?code=${code}&state=${state}`);
         dispatch(login(discordUserData!));
         navigate('/dashboard/guilds');
       } catch (error) {
