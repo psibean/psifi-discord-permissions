@@ -9,6 +9,7 @@ import Home from './pages/home/Home'
 import PrivacyPolicy from './pages/home/PrivacyPolicy'
 import Security from './pages/home/Security'
 import TermsOfService from './pages/home/TermsOfService'
+import NotFound from './pages/NotFound'
 import Root from './pages/Root'
 import { CLIENT_ROUTES } from './util/constants'
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         path: CLIENT_ROUTES.DASHBOARD.GUILDS,
         element: <Guilds />
       },
+      {
+        path: "*",
+        element: <NotFound />
+      }
     ],
     errorElement: <ErrorBoundary />
   },
@@ -55,9 +60,17 @@ const router = createBrowserRouter([
       {
         path: CLIENT_ROUTES.ROOT,
         element: <Home />
+      },
+      {
+        path: "*",
+        element: <NotFound />
       }
     ],
     errorElement: <ErrorBoundary />
+  },
+  {
+    path: "*",
+    element: <NotFound />
   }
 ])
 
