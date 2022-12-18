@@ -4,6 +4,7 @@ import Guild from './pages/dashboard/Guild'
 import GuildInviteRedirectHandler from './pages/dashboard/GuildInviteRedirectHandler'
 import Guilds from './pages/dashboard/Guilds'
 import DiscordLogin from './pages/DiscordLogin'
+import ErrorBoundary from './pages/ErrorBoundary'
 import Home from './pages/home/Home'
 import PrivacyPolicy from './pages/home/PrivacyPolicy'
 import Security from './pages/home/Security'
@@ -28,7 +29,8 @@ const router = createBrowserRouter([
         path: CLIENT_ROUTES.DASHBOARD.GUILDS,
         element: <Guilds />
       },
-    ]
+    ],
+    errorElement: <ErrorBoundary />
   },
   {
     path: CLIENT_ROUTES.AUTH.GUILD_INVITE,
@@ -54,7 +56,8 @@ const router = createBrowserRouter([
         path: CLIENT_ROUTES.ROOT,
         element: <Home />
       }
-    ]
+    ],
+    errorElement: <ErrorBoundary />
   }
 ])
 
