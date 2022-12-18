@@ -1,4 +1,4 @@
-import type { Guild } from "discord.js";
+import { Guild, PermissionFlagsBits } from "discord.js";
 import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import logger from "../../utils/logger.js";
@@ -18,9 +18,14 @@ export default class DiscordController {
     try {
       const guild = this.getGuildById(req);
       const roles = await guild.roles.fetch();
+      const botMember = guild.members.resolve(botClient.user?.id ?? "");
+
+      if (botMember === null) {
+        throw new Error("Bot not in guild");
+      }
 
       return res.status(200).json({
-        channels: buildSelectedChannels(guild.channels.cache),
+        channels: buildSelectedChannels(guild.channels.cache.filter(channel => channel.permissionsFor(botMember).has(PermissionFlagsBits.ViewChannel))),
         guild: guildToListedGuild(guild),
         roles: buildSelectedRoles(roles)
       });
