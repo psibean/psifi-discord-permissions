@@ -15,8 +15,8 @@ export const CLIENT_ROUTES = {
     CHANNEL: "guilds/:guildId/channels/:channelId",
     CHANNEL_OVERWRITES: "guilds/:guildId/channels/:channelId/overwrites",
     CHANNELS: "guilds/:guildId/channels",
-    GUILD: "guilds/:guildId",
-    GUILDS: "guilds",
+    GUILD: "/dashboard/guilds/:guildId",
+    GUILDS: "/dashboard/guilds",
     USER: {
       ACCOUNT: "user/account",
       SETTINGS: "user/settings",
