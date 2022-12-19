@@ -1,7 +1,6 @@
-import { Client, Collection, PermissionFlagsBits, Snowflake } from "discord.js";
+import { Client, Collection, Snowflake } from "discord.js";
 import { guildToListedGuild, oAuthGuildToListedGuild } from "../../utils/transformers";
 import type { InternalOAuthProfile, OAuthGuild, DiscordUserData, ListedGuild } from "../../../../psd-types/src/types";
-import { hasPermission } from "../../utils/filters";
 
 export type OAuthUserOptions = {
   profile: InternalOAuthProfile;

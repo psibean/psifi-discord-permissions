@@ -40,7 +40,7 @@ export default class DiscordController {
       // TODO: Error handling
       const { guilds } = req.body as { guilds: Guild[] };
       const accessibleGuilds: Guild[] = [];
-      const requestUser = req.user!;
+      const requestUser = req.user;
 
       for (const guild of guilds) {
         if (botClient.guilds.cache.has(guild.id)) {
@@ -48,7 +48,7 @@ export default class DiscordController {
         }
       }
       return res.status(200).json({ 
-        guilds: accessibleGuilds.filter(guildAccessFilter(requestUser.id)).map(guild => guildToListedGuild(guild))
+        guilds: accessibleGuilds.filter(guildAccessFilter(requestUser?.id)).map(guild => guildToListedGuild(guild))
       });
     } catch (error) {
       this.logger.error(error);
