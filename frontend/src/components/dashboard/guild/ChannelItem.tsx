@@ -21,8 +21,7 @@ export default ({ channel, onClick }: ChannelItemProps) => {
   const calculatedChannelPermissions = useCalculatedMemberPermissionsForChannel(selectedGuildChannel.id);
   const locked = 
     (selectedGuildChannel.type === ChannelType.GuildVoice || selectedGuildChannel.type === ChannelType.GuildStageVoice)
-    && calculatedChannelPermissions !== undefined
-    && !hasPermission(PermissionFlagsBits.Connect, BigInt(calculatedChannelPermissions))
+    && !hasPermission(PermissionFlagsBits.Connect, calculatedChannelPermissions)
 
   const isViewable = hasPermission(PermissionFlagsBits.ViewChannel, BigInt(calculatedChannelPermissions));
   
@@ -30,7 +29,7 @@ export default ({ channel, onClick }: ChannelItemProps) => {
   const handleClick = useCallback(() => {
     if (isViewable)
       onClick(channel);
-  }, [channel])
+  }, [isViewable])
 
   return (<div 
     className={classNames(
