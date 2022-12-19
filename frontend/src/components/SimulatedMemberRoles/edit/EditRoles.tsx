@@ -35,11 +35,11 @@ export default ({ guildId, onClose }: EditRolesProps) => {
     }
 
     const editRolesElement = document.getElementById("simulated-member-roles");
-    editRolesElement?.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', handleEscape);
     editRolesElement?.getElementsByTagName('input')[0]?.focus();
 
     return () => {
-      editRolesElement?.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleEscape);
     }
   }, []);
 
