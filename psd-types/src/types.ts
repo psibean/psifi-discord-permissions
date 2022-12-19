@@ -13,15 +13,6 @@ export type PermissionData = {
   channelTypes: PermissionChannelTypes
 }
 
-export type OAuthGuild = {
-  id: string;
-  name: string;
-  icon: string,
-  owner: boolean,
-  permissions: string,
-  features: string[]
-}
-
 export type DiscordOAuthProfileEmail = {
   email: string;
   verified: boolean;

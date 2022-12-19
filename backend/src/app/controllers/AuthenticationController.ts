@@ -11,7 +11,7 @@ import {
     OAuth2LoginErrorResponse,
     OAuth2ProtectedResourceErrorResponse,
 } from "../config/oauth2/types.js";
-import { buildDiscordResourceUrl } from "../../utils/transformers";
+import { buildDiscordResourceUrl } from "../../utils/transformers.js";
 import createHttpError from "http-errors";
 import { Logger } from "pino";
 

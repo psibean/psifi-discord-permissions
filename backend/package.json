@@ -6,6 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
     "dev:start": "npm run build && npm run start",
     "start:dev": "nodemon -r dotenv/config ./lib/src/index.js",
     "start:ts": "npx ts-node-esm -r dotenv/config ./src/index.ts"

@@ -1,9 +1,9 @@
 import cors from 'cors';
 
-import { ALLOWED_ORIGINS } from '../../utils/constants.js';
+import { PSD_ALLOWED_ORIGINS } from '../../utils/constants.js';
 
 const corsConfig = cors({
-  origin: ALLOWED_ORIGINS,
+  origin: PSD_ALLOWED_ORIGINS,
   allowedHeaders: ['x-csrf-token'],
   methods: [
     "GET",

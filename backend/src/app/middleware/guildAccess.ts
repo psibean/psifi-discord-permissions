@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import botClient from "../../bot/bot";
-import { userHasGuildAccess } from "../../utils/filters";
+import botClient from "../../bot/bot.js";
+import { userHasGuildAccess } from "../../utils/filters.js";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const {

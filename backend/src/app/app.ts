@@ -5,7 +5,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import session from './config/session.js';
 
-import { IS_HOSTING, PSD_BOT_TOKEN } from '../utils/constants.js';
+import { PSD_BOT_TOKEN, PSD_COOKIE_SECRET } from '../utils/constants.js';
 import rootRouter from './routers/root.js';
 import prisma from '../database/db.js';
 import user from './middleware/user.js';
@@ -26,13 +26,13 @@ export default class DiscordSecurityApp {
 
     this.server.use(
       helmet({
-        contentSecurityPolicy: IS_HOSTING ?? false
+        contentSecurityPolicy: true
       })
     );
 
     this.server.use(cors);
     this.server.use(session);
-    this.server.use(cookieParser(process.env.COOKIE_SECRET));
+    this.server.use(cookieParser(PSD_COOKIE_SECRET));
     this.server.use(user);
 
     this.server.set('trust proxy', 1);

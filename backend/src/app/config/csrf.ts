@@ -1,5 +1,5 @@
 import { doubleCsrf } from 'csrf-csrf';
-import { FRONTEND_DOMAIN, IS_PRODUCTION } from '../../utils/constants.js';
+import { PSD_FRONTEND_DOMAIN, IS_PRODUCTION } from '../../utils/constants.js';
 
 export const {
   doubleCsrfProtection,
@@ -12,7 +12,7 @@ export const {
     signed: true,
     sameSite: IS_PRODUCTION ? 'strict' : 'lax',
     secure: IS_PRODUCTION,
-    domain: FRONTEND_DOMAIN,
+    domain: PSD_FRONTEND_DOMAIN,
     httpOnly: true
   }
 });
