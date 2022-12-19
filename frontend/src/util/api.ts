@@ -26,8 +26,7 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
 export const authenticatedGetJson = async <T extends Record<string, unknown>>(url: string, request: RequestInit = {}) => {
   const requestResponse = await authenticatedGet(url, request);
   const responseData = await requestResponse.json() as T | { error: { message: string } };
-  console.log("DATA:");
-  console.log(responseData);
+  
   if ("error" in responseData) {
     throw new RequestError(requestResponse.status, (responseData.error as { message: string }).message);
   }
@@ -61,8 +60,6 @@ export const authenticatedPostJson = async <T extends Record<string, unknown>>(u
 
 export const fetchUserData = (dispatch: Dispatch) => {
   return authenticatedGetJson<DiscordUserData>(API_ROUTES.USER).then((data) => {
-    console.log("Got profile:");
-    console.log(data);
     dispatch(login(data as UserState));
   });
 }
@@ -83,8 +80,6 @@ export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
       previous[current.id] = current.permissions;
       return previous;
     }, {} as SimulatedServerPermissions );
-    console.log("SERVER PERMISSIONS BEING SET:");
-    console.log(serverPermissions);
   
     const rolePermissions: Record<string, string> = {};
     Object.values(selectedGuild.roles).forEach(role => {
