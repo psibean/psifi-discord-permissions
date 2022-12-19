@@ -1,4 +1,4 @@
-import { type Guild, PermissionFlagsBits, type Client } from 'discord.js';
+import { type Client } from 'discord.js';
 import cookieParser from 'cookie-parser';
 import cors from './config/cors.js';
 import express, { NextFunction, Request, Response } from 'express';
@@ -7,13 +7,8 @@ import session from './config/session.js';
 
 import { IS_HOSTING, PSD_BOT_TOKEN } from '../utils/constants.js';
 import rootRouter from './routers/root.js';
-import { logger } from '../utils/logger.js';
-import getPermittedMembers from '../utils/getPermittedMembers.js';
-import { oAuthUserManager } from './managers/OAuthUserManager.js';
-import { guildRepository } from '../database/repositories/GuildRepository.js';
 import prisma from '../database/db.js';
 import user from './middleware/user.js';
-import { guildToListedGuild } from '../utils/transformers.js';
 import type { Logger } from 'pino';
 
 
@@ -50,30 +45,12 @@ export default class DiscordSecurityApp {
       }
       next();
     })
-    
-    const handleGuildRemoval = (guild: Guild) => {
-      try {
-        void guildRepository.deleteGuildSettings(guild);
-      } catch(error) {
-        this.logger.error(error);
-      }
-    }
-    
-    botClient.on('guildDelete', (guild) => {
-      void handleGuildRemoval(guild);
-    })
-    
-    botClient.on('guildUpdate', (oldGuild, newGuild) => {
-      if (oldGuild.ownerId !== newGuild.ownerId) {
-        void handleGuildRemoval(oldGuild);
-      }
-    })
   }
 
   public async start(port: string | number) {
     this.botClient.once('ready', () => {
       this.server.listen(port, () => {
-        logger.info(`Express test app is listening at http://localhost:${port}`);
+        this.logger.info(`Express test app is listening at http://localhost:${port}`);
       })
     });
 

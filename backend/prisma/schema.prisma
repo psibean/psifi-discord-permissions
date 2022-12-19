@@ -16,24 +16,3 @@ model Session {
   data        String
   expiresAt   DateTime
 }
-
-model User {
-  id              String      @db.Uuid  @default(uuid())
-  discordId       String      @unique   @db.VarChar(128)
-  preferences     UserPreferences?
-  @@id([id])
-}
-
-model Guild {
-  id        String  @db.VarChar(128)
-  ownerOnly Boolean @default(true)
-  role      String?  @db.VarChar(128)
-
-  @@id([id])
-}
-
-model UserPreferences {
-  id    String  @db.Uuid
-  user  User    @relation(fields: [id], references: [id], onDelete: Cascade)
-  @@id([id])
-}
