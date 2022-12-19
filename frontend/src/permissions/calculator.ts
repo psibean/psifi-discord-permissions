@@ -1,4 +1,4 @@
-import type { ChannelPermissionOverwrite, ChannelPermissionOverwrites, PermissionChannelTypes } from "../../../psd-types/src/types";
+import type { ChannelPermissionOverwrite, ChannelPermissionOverwrites } from "../../../psd-types/src/types";
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { SimulatedServerPermissions } from "../state/simulatedServer.slice";
 
@@ -10,7 +10,7 @@ const computeOverwrites = (
   memberOverwrites?: string | ChannelPermissionOverwrite,
   ) => {
   if ((basePermissions & PermissionFlagsBits.Administrator) === PermissionFlagsBits.Administrator) {
-    return PermissionFlagsBits.Administrator
+    return PermissionFlagsBits.Administrator;
   }
 
   let computedPermissions = basePermissions;
@@ -62,8 +62,9 @@ const computeBasePermissions = (guildId: string, memberRoles: string[], rolePerm
   permissions = BigInt(rolePermissions[guildId] ?? "0");
 
   for (const role of memberRoles) {
-    if (role in memberRoles && role !== guildId)
+    if (role !== guildId) {
       permissions |= BigInt(rolePermissions[role] ?? "0");
+    }
   }
 
   if ((permissions & PermissionFlagsBits.Administrator) === PermissionFlagsBits.Administrator) {
