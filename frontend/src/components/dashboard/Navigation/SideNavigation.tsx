@@ -16,7 +16,7 @@ export type SideNavigationProps = {
  
 export const SideNavigation = () => {
   const selectedGuild = useSelectedGuild();
-  return <aside className="flex flex-col h-screen min-w-fit border-r overflow-y-auto border-slate-900/10 dark:border-slate-300/10">
+  return <aside className="flex flex-col scrollbar-base h-screen min-w-fit border-r overflow-y-auto overflow-x-hidden border-slate-900/10 dark:border-slate-300/10">
     <NavigationHeader />
     <SelectedGuild />
     { selectedGuild.guild && <SimulatedMemberRoles />}
