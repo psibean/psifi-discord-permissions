@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { computePermissions } from "../permissions/calculator";
 import { ChannelPermissionOverwrites, SelectedChannelType } from "../../../psd-types/src/types";
@@ -85,7 +85,7 @@ const simulatedServerSlice = createSlice({
             state.member.permissions = action.payload.permissions;
         },
         setMemberRoles: (state, action: UpdateRolesAction) => {
-            const calculatedPermissions = calculateMemberPermissionsWithinState(state.id!, action.payload, state.permissions, state.channels);
+            const calculatedPermissions = calculateMemberPermissionsWithinState(state.id!, action.payload, current(state.permissions), current(state.channels));
             state.member.roles = action.payload;
             state.member.calculatedPermissions = calculatedPermissions;
         },
@@ -125,6 +125,6 @@ export const setSimulatedServer = (data: SetSimulatedServerPayload) => simulated
 
 export const useSimulatedChannel = (id: string) => useSelector<PsifiDiscordState, SimulatedChannel | null>(state => state.simulatedServer.channels[id] ?? null)
 
-export const useCalculatedMemberPermissionsForChannel = (channelId: string) => useSelector<PsifiDiscordState, string>(state => state.simulatedServer.member.calculatedPermissions[channelId])
+export const useCalculatedMemberPermissionsForChannel = (channelId: string) => useSelector<PsifiDiscordState, bigint>(state => BigInt(state.simulatedServer.member.calculatedPermissions[channelId] ?? "0n"))
 
 export default simulatedServerSlice.reducer;
