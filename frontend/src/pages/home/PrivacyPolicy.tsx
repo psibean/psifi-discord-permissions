@@ -28,18 +28,14 @@ export default () => {
       </Paragraph>
       <UnorderedList>
         <ListItem>
-          Server information such as the id, name, icon, banner, and permissions of a particular user as <Anchor href="https://discord.com/developers/docs/resources/user#get-current-user-guilds-example-partial-guild">found here</Anchor>.
-          This information will only be accessible by server owners, any members with the Administrator permission, and any other members who have been permitted access by the server owner, regardless of whether or not Psifi Bot is in the server.
-        </ListItem>
-        <ListItem>
-          Server information such as the server roles, channel information, other configuration settings as <Anchor href="https://discord.com/developers/docs/resources/guild">found here</Anchor>.
+          Server information such as the server id, name, banner, channels, roles, and more <Anchor href="https://discord.com/developers/docs/resources/guild">as per Discord documentation</Anchor>.
           This information will only be accessible by server owners, any members with the Administrator permission, and any other members who have been permitted access by the server owner, so long as Psifi Bot is a member of the server.
         </ListItem>
         <ListItem>
-          Server member information for all members on your server as <Anchor href="https://discord.com/developers/docs/resources/guild#guild-member-object">found here</Anchor>.
+          Server member information for all members on your server <Anchor href="https://discord.com/developers/docs/resources/guild#guild-member-object">as per Discord documentation found here</Anchor>.
         </ListItem>
         <ListItem>
-          When logging in to the dashboard, user information relating to the authenticated user such as id, username, descriptor, avatar, banner, and other user specific settings, the servers they are in and their permissions within those servers as <Anchor href="https://discord.com/developers/docs/resources/user#user-object">found here</Anchor>.
+          When logging in to the dashboard, user information relating to the authenticated user such as id, username, descriptor, avatar, banner, and other user specific settings <Anchor href="https://discord.com/developers/docs/resources/user#user-object">as per Discord documentation</Anchor>.
         </ListItem>
       </UnorderedList>
       <Paragraph>Collected data is used for the sole purpose of providing you the features and services that Psifi Bot provides.</Paragraph>
