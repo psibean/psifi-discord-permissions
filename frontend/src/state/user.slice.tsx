@@ -24,6 +24,9 @@ const userSlice = createSlice({
       state.profile = null;
       state.guilds = [];
     },
+    addGuild: (state, action) => {
+      state.guilds = [...state.guilds, action.payload]
+    },
     removeGuild: (state, action) => {
       state.guilds = state.guilds.filter(guild => guild.id !== action.payload)
     }
@@ -35,7 +38,9 @@ export const login = (data: UserState) =>
 
 export const logout = () => userSlice.actions.logout();
 
-export const removeGuild = (guildId: string) => userSlice.actions.removeGuild(guildId);
+export const addListedGuild = (guild: ListedGuild) => userSlice.actions.addGuild(guild);
+
+export const removeListedGuild = (guildId: string) => userSlice.actions.removeGuild(guildId);
 
 export const useUser = () => useSelector<PsifiDiscordState, UserState>(state => state.user);
 export const useProfile = () => useSelector<PsifiDiscordState, UserState['profile'] | {}>(state => state.user.profile);
