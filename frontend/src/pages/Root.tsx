@@ -1,5 +1,4 @@
 import { CLIENT_ROUTES, PSD_API_URL } from '../util/constants.js';
-import { SiDiscord } from 'react-icons/si';
 import { Link, Outlet } from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -35,6 +34,9 @@ export default () => {
         <HomeNavLink to={CLIENT_ROUTES.SECURITY} label="Security" />
         <HomeNavLink to={CLIENT_ROUTES.TOS} label="Terms of Service" />
         <HomeNavLink to={CLIENT_ROUTES.PRIVACY} label="Privacy Policy" />
+        <a className="text-center block text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300" href={`${PSD_API_URL}/auth/discord/login`}>
+          Dashboard
+        </a>
       </div>
     </div>
     <div className="w-full px-4 overflow-auto">
