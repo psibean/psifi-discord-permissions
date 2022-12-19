@@ -17,7 +17,7 @@ export default () => {
           Easily simulate and visualize the permissions of your Discord server, any combination of roles!
         </Paragraph>
         <Paragraph>
-          <span className="font-bold">Psifi Bot is currently in experimental beta, bugs and issues should be expected.</span>
+          <span className="font-bold">Psifi Bot is currently in experimental beta, bugs and issues should be expected. Some may require you to logout and back in, or refresh to fix. However, the permission calculations are solid!</span>
         </Paragraph>
         <Paragraph>
           Please report any potential bugs or problems via the <Anchor href="https://psifisolutions.com/discord">Psifi Solutions Discord Server</Anchor>, or directly to Psi#2741.
@@ -30,6 +30,8 @@ export default () => {
         <Paragraph>
           By logging in, or inviting Psifi Bot to your server, you agree to the Terms of Service and Privacy Policy.
         </Paragraph>
+
+        <HeaderTwo>Future Plans</HeaderTwo>
         <Paragraph>
           Psifi Bot will be undergoing constant updates and improvements, some of the longer term plans include:
         </Paragraph>
@@ -42,6 +44,9 @@ export default () => {
           </ListItem>
           <ListItem>
             The ability to, in addition to the previous point, save the changes you make directly to your server.
+          </ListItem>
+          <ListItem>
+            Mobile UI support.
           </ListItem>
         </UnorderedList>
     </>
