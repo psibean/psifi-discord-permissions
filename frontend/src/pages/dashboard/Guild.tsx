@@ -17,7 +17,7 @@ import { selectChannel, useSelectedChannel } from "../../state/selectedChannel.s
 import { CLIENT_ROUTES } from "../../util/constants";
 import ChannelItem from "../../components/dashboard/guild/ChannelItem";
 import RequestError from "../../util/RequestError";
-import { addListedGuild, removeListedGuild, useGuilds } from "../../state/user.slice";
+import { useListedGuilds } from "../../state/user.slice";
 import { BiHelpCircle } from "react-icons/bi";
 
 type CategoryChannelMap = {
@@ -31,7 +31,7 @@ export default () => {
 
   const selectedGuild = useSelectedGuild();
   const selectedChannel = useSelectedChannel();
-  const listedGuilds = useGuilds();
+  const listedGuilds = useListedGuilds();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
@@ -68,10 +68,6 @@ export default () => {
     if (selectedChannel.channel !== null) {
       selectChannel(null);
     }
-
-    if (selectedGuild.guild !== null && !listedGuilds.find(guild => guild.id === selectedGuild.guild?.id)) {
-      addListedGuild(selectedGuild.guild);
-    }
   }, [])
 
   useEffect(() => {
@@ -87,7 +83,6 @@ export default () => {
                 navigate(CLIENT_ROUTES.ROOT, { relative: 'path' });
                 break;
               case 403:
-                dispatch(removeListedGuild(guildId!));
                 navigate(`${CLIENT_ROUTES.DASHBOARD.ROOT}/${CLIENT_ROUTES.DASHBOARD.GUILDS}`, { relative: 'path' });
                 break;
             }

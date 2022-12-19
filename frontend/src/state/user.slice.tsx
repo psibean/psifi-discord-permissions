@@ -17,32 +17,26 @@ const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      state.profile = action.payload.profile;
-      state.guilds = action.payload.guilds;
+      state.profile = action.payload;
     },
     logout: (state) => {
       state.profile = null;
       state.guilds = [];
     },
-    addGuild: (state, action) => {
-      state.guilds = [...state.guilds, action.payload]
-    },
-    removeGuild: (state, action) => {
-      state.guilds = state.guilds.filter(guild => guild.id !== action.payload)
+    setGuilds: (state, action) => {
+      state.guilds = action.payload;
     }
   }
 })
 
-export const login = (data: UserState) =>
+export const login = (data: InternalOAuthProfile) =>
   userSlice.actions.login(data)
 
 export const logout = () => userSlice.actions.logout();
 
-export const addListedGuild = (guild: ListedGuild) => userSlice.actions.addGuild(guild);
-
-export const removeListedGuild = (guildId: string) => userSlice.actions.removeGuild(guildId);
+export const setListedGuilds = (guilds: ListedGuild[]) => userSlice.actions.setGuilds(guilds);
 
 export const useUser = () => useSelector<PsifiDiscordState, UserState>(state => state.user);
 export const useProfile = () => useSelector<PsifiDiscordState, UserState['profile'] | {}>(state => state.user.profile);
-export const useGuilds = () => useSelector<PsifiDiscordState, UserState['guilds']>(state => state.user.guilds);
+export const useListedGuilds = () => useSelector<PsifiDiscordState, UserState['guilds']>(state => state.user.guilds);
 export default userSlice.reducer;

@@ -1,10 +1,9 @@
-import { PermissionFlagsBits } from "discord.js";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { logger } from "../../utils/logger";
 import botClient from "../../bot/bot";
+import { userHasGuildAccess } from "../../utils/filters";
 
-export default (req: Request, res: Response, next: NextFunction) => {
+export default async (req: Request, res: Response, next: NextFunction) => {
   const {
     guildId
   } = req.params;
@@ -22,17 +21,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     return next(createHttpError(400, 'Bad request'));
   }
 
-  if (guild.ownerId === user.id) {
+  if (await userHasGuildAccess(req.user?.id, guild)) {
     return next();
   }
 
-  guild.members.fetch(user.id).then(member => {
-    if (member.permissions.has(PermissionFlagsBits.Administrator)) {
-      return next();
-    }
-    return next(accessDeniedError);
-  }).catch((error) => {
-    logger.error(error);
-    return next(accessDeniedError);
-  })
+  return next(accessDeniedError);
 }

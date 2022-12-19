@@ -1,7 +1,8 @@
 import type { BaseFetchOptions, Client } from "discord.js";
 import { CachedManager } from 'discord.js';
+import { InternalOAuthProfile } from "../../../../psd-types/src/types.js";
 import botClient from "../../bot/bot.js";
-import { OAuthUser, OAuthUserOptions } from "../models/OAuthUser.js";
+import { OAuthUser } from "../models/OAuthUser.js";
 
 
 export interface OAuthUserFetchOptions extends BaseFetchOptions {
@@ -16,8 +17,8 @@ export class OAuthUserManager extends CachedManager<string, OAuthUser, string> {
     setTimeout(() => this.sweep(), OAuthUserManager.SWEEP_INTERVAL)
   }
 
-  public create(options: OAuthUserOptions, store = true) {
-    const oauthUser = new OAuthUser(this.client, options);
+  public create(profile: InternalOAuthProfile, store = true) {
+    const oauthUser = new OAuthUser(this.client, profile);
     if (store) {
       this.cache.set(oauthUser.id, oauthUser);
     }

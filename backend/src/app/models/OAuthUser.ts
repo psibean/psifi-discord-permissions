@@ -1,32 +1,21 @@
-import { Client, Collection, Snowflake } from "discord.js";
-import { guildToListedGuild, oAuthGuildToListedGuild } from "../../utils/transformers";
-import type { InternalOAuthProfile, OAuthGuild, DiscordUserData, ListedGuild } from "../../../../psd-types/src/types";
+import { Client } from "discord.js";
+import type { InternalOAuthProfile } from "../../../../psd-types/src/types";
 
 export type OAuthUserOptions = {
   profile: InternalOAuthProfile;
-  managedGuilds: OAuthGuild[];
 }
 
 export class OAuthUser {
   client: Client;
   profile: InternalOAuthProfile;
-  guilds: Collection<Snowflake, ListedGuild>;
   accessToken: string;
   refreshToken: string;
   lastTouched: number;
 
-  public constructor(client: Client, { profile, managedGuilds }: OAuthUserOptions) {
+  public constructor(client: Client, profile: InternalOAuthProfile) {
     this.client = client;
     this.profile = profile;
 
-    this.guilds = new Collection(managedGuilds.map(oAuthGuild => {
-      if (this.client.guilds.cache.has(oAuthGuild.id)) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return [oAuthGuild.id, guildToListedGuild(this.client.guilds.cache.get(oAuthGuild.id)!)];
-      }
-
-      return [oAuthGuild.id, oAuthGuildToListedGuild(oAuthGuild)]
-    }))
     this.lastTouched = Date.now();
   }
 
@@ -34,11 +23,8 @@ export class OAuthUser {
     return this.profile.id;
   }
 
-  public data(): DiscordUserData {
-    return {
-      profile: this.profile,
-      guilds: Array.from(this.guilds.values())
-    };
+  public data(): InternalOAuthProfile {
+    return this.profile;
   }
 
   public touch() {

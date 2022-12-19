@@ -1,30 +1,13 @@
 import { Collection, Guild, GuildBasedChannel, Role } from "discord.js";
-import { ChannelPermissionOverwrites, ListedGuild, OAuthGuild, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRole, SelectedGuildRoles } from "../../../psd-types/src/types";
+import { ChannelPermissionOverwrites, ListedGuild, SelectedGuildChannel, SelectedGuildChannels, SelectedGuildRole, SelectedGuildRoles } from "../../../psd-types/src/types";
 
 export const guildToListedGuild = (guild: Guild): ListedGuild => ({
     id: guild.id,
     icon: guild.iconURL(),
     name: guild.name,
     nameAcronym: guild.nameAcronym,
-    bannerUrl: guild.bannerURL(),
-    access: true
+    bannerUrl: guild.bannerURL()
 });
-
-export const oAuthGuildToListedGuild = (guild: OAuthGuild): ListedGuild  => ({
-  id: guild.id,
-  icon: buildDiscordResourceUrl('icons', guild.id, guild.icon),
-  name: guild.name,
-  nameAcronym: getNmeAcronym(guild.name),
-  bannerUrl: null,
-  access: false
-})
-
-const getNmeAcronym = (name: string) => {
-  return name
-    .replace(/'s /g, ' ')
-    .replace(/\w+/g, e => e[0])
-    .replace(/\s/g, '');
-}
 
 export const channelToChannelWithOverwrites = (channel: GuildBasedChannel): SelectedGuildChannel => {
   const permissionOverwrites: ChannelPermissionOverwrites = {};

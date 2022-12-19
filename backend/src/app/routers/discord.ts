@@ -10,7 +10,7 @@ const discordRouter = Router({
 const discordController = new DiscordController(logger);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-discordRouter.post('/guilds', (req, res, next) => discordController.getGuilds(req, res, next));
+discordRouter.get('/guilds', (req, res, next) => discordController.getGuilds(req, res, next));
 discordRouter.get('/guilds/:guildId', guildAccess, (req, res, next) => { void discordController.getGuild(req, res, next) });
 discordRouter.get('/guilds/:guildId/roles', guildAccess, (req, res, next) => discordController.getRoles(req, res, next));
 discordRouter.get('/guilds/:guildId/channels', guildAccess, (req, res, next) => discordController.getChannels(req, res, next));

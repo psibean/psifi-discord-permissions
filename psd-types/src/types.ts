@@ -82,7 +82,6 @@ export type InternalOAuthProfile = {
 
 export type DiscordUserData = {
   profile: InternalOAuthProfile;
-  guilds: ListedGuild[];
 }
 
 export type SelectedGuildRole = {
@@ -94,26 +93,13 @@ export type SelectedGuildRole = {
   position: number;
 }
 
-export interface ListedGuildInterface {
-  access: boolean;
+export type ListedGuild = {
   id: string;
   icon: string | null;
   name: string;
   nameAcronym: string;
   bannerUrl: string | null;
 }
-
-export type ListedGuildWithAccess = ListedGuildInterface & {
-  access: true;
-  bannerUrl: string | null;
-}
-
-export type ListedGuildWithoutAccess = ListedGuildInterface & {
-  access: false;
-  bannerUrl: null;
-}
-
-export type ListedGuild = ListedGuildWithAccess | ListedGuildWithoutAccess;
 
 export type ChannelPermissionOverwrite = {
   allows: string;

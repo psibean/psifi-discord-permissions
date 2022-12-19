@@ -38,18 +38,11 @@ export default class DiscordController {
   public getGuilds(req: Request, res: Response, next: NextFunction) {
     try {
       // TODO: Error handling
-      const { guilds } = req.body as { guilds: Guild[] };
-      const accessibleGuilds: Guild[] = [];
       const requestUser = req.user;
 
-      for (const guild of guilds) {
-        if (botClient.guilds.cache.has(guild.id)) {
-          accessibleGuilds.push(guild);
-        }
-      }
-      return res.status(200).json({ 
-        guilds: accessibleGuilds.filter(guildAccessFilter(requestUser?.id)).map(guild => guildToListedGuild(guild))
-      });
+      return res.status(200).json(
+        botClient.guilds.cache.filter(guildAccessFilter(requestUser?.id)).map(guild => guildToListedGuild(guild))
+      );
     } catch (error) {
       this.logger.error(error);
       next(createHttpError(500, GUILDS_INTERNAL_ERROR));

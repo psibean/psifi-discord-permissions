@@ -33,6 +33,7 @@ const DISCORD_GUILDS = "/discord/guilds";
 export const API_ROUTES = {
   CSRF_TOKEN: "/csrftoken",
   GUILD: (guildId: string) => `${DISCORD_GUILDS}/${guildId}`,
+  GUILDS: DISCORD_GUILDS,
   GUILD_CHANNELS: (guildId: string) => `${DISCORD_GUILDS}/${guildId}/channels`,
   CHANNEL: (guildId: string, channelId: string) => `${DISCORD_GUILDS}/${guildId}/channels/${channelId}`,
   USER: "/users/@me"

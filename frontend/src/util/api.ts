@@ -2,9 +2,9 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { setSimulatedServer, SimulatedChannels, SimulatedServerPermissions } from '../state/simulatedServer.slice';
 import { selectChannel } from '../state/selectedChannel.slice';
 import { SelectedGuild, selectGuild } from '../state/selectedGuild.slice';
-import { login, UserState } from '../state/user.slice';
+import { login, setListedGuilds, UserState } from '../state/user.slice';
 import { API_ROUTES, PSD_API_URL } from './constants';
-import { ChannelPermissionOverwrites, DiscordUserData, SelectedGuildChannel, SelectedGuildChannels } from '../../../psd-types/src/types';
+import { ChannelPermissionOverwrites, DiscordUserData, InternalOAuthProfile, ListedGuild, SelectedGuildChannel, SelectedGuildChannels } from '../../../psd-types/src/types';
 import RequestError from './RequestError';
 
 export const get = (url: string, options: RequestInit = {}) => {
@@ -23,10 +23,9 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
   });
 }
 
-export const authenticatedGetJson = async <T extends Record<string, unknown>>(url: string, request: RequestInit = {}) => {
+export const authenticatedGetJson = async <T extends Record<string, unknown> | unknown[]>(url: string, request: RequestInit = {}) => {
   const requestResponse = await authenticatedGet(url, request);
   const responseData = await requestResponse.json() as T | { error: { message: string } };
-  
   if ("error" in responseData) {
     throw new RequestError(requestResponse.status, (responseData.error as { message: string }).message);
   }
@@ -59,9 +58,22 @@ export const authenticatedPostJson = async <T extends Record<string, unknown>>(u
 }
 
 export const fetchUserData = (dispatch: Dispatch) => {
-  return authenticatedGetJson<DiscordUserData>(API_ROUTES.USER).then((data) => {
-    dispatch(login(data as UserState));
+  return authenticatedGetJson<InternalOAuthProfile>(API_ROUTES.USER).then((data) => {
+    dispatch(login(data));
   });
+}
+
+export const fetchGuilds = async (dispatch: Dispatch) => {
+  try {
+    const guilds = await authenticatedGetJson<ListedGuild[]>(API_ROUTES.GUILDS);
+    dispatch(setListedGuilds(guilds));
+    return guilds;
+  } catch (error) {
+    if (typeof error === 'string') {
+      throw new Error(error);
+    }
+    throw error;
+  }
 }
 
 export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {

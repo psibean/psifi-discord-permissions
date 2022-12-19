@@ -50,32 +50,9 @@ export default class DiscordSecurityApp {
       }
       next();
     })
-
-    botClient.on('guildCreate', async guild => {
-      // When a new guild is joined, we want to update existing cache.
+    
+    const handleGuildRemoval = (guild: Guild) => {
       try {
-        const permittedMembers = await getPermittedMembers(guild);
-    
-        for (const userId of permittedMembers) {
-          if (oAuthUserManager.cache.has(userId)) {
-            oAuthUserManager.cache.get(userId)?.guilds.set(guild.id, guildToListedGuild(guild));
-          }
-        }
-      } catch(error) {
-        this.logger.error(error);
-      }
-    })
-    
-    const handleGuildRemoval = async (guild: Guild) => {
-      try {
-        const permittedMembers = await getPermittedMembers(guild);
-    
-        for (const userId of permittedMembers) {
-          const oAuthUser = oAuthUserManager.cache.get(userId);
-          if (oAuthUser) {
-            oAuthUser.guilds.delete(guild.id);
-          }
-        }
         void guildRepository.deleteGuildSettings(guild);
       } catch(error) {
         this.logger.error(error);
@@ -89,35 +66,6 @@ export default class DiscordSecurityApp {
     botClient.on('guildUpdate', (oldGuild, newGuild) => {
       if (oldGuild.ownerId !== newGuild.ownerId) {
         void handleGuildRemoval(oldGuild);
-      }
-    })
-    
-    botClient.on('guildMemberUpdate', async(oldMember, newMember) => {
-      try {
-        const oAuthUser = oAuthUserManager.cache.get(oldMember.user.id);
-        if (oAuthUser) {
-          const guildSettings = await guildRepository.getGuildSettings(oldMember.guild);
-          const role = guildSettings?.role ?? '';
-          const onlyOwnerPermitted = guildSettings?.ownerOnly ?? true;
-          if (!onlyOwnerPermitted) {
-            const hadAdmin = oldMember.permissions.has(PermissionFlagsBits.Administrator);
-            const hasAdmin = newMember.permissions.has(PermissionFlagsBits.Administrator);
-    
-            const hadRole = oldMember.roles.cache.has(role);
-            const hasRole = newMember.roles.cache.has(role);
-    
-            const addGuildForUser = (!hadAdmin || !hadRole) && (hasAdmin || hasRole);
-            const removeGuilderForUser = (hadAdmin || hadRole) && (!hasAdmin && !hasRole);
-    
-            if (addGuildForUser) {
-              oAuthUser.guilds.set(oldMember.guild.id, guildToListedGuild(oldMember.guild));
-            } else if (removeGuilderForUser) {
-              oAuthUser.guilds.delete(oldMember.guild.id);
-            }
-          }
-        }
-      } catch(error) {
-        this.logger.error(error);
       }
     })
   }

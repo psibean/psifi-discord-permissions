@@ -3,7 +3,6 @@ import type {
     DiscordOAuthProfile,
     DiscordUserData,
     InternalOAuthProfile,
-    OAuthGuild,
 } from "../../../../psd-types/src/types";
 import { oAuthUserManager } from "../managers/OAuthUserManager.js";
 import { authorize, confirmAuthorization, oauth2 } from "../config/oauth2.js";
@@ -15,7 +14,6 @@ import {
 import { buildDiscordResourceUrl } from "../../utils/transformers";
 import createHttpError from "http-errors";
 import { Logger } from "pino";
-import { oAuthGuildAccessFilter } from "../../utils/filters";
 
 export type PassportDiscordOAuthHandler = (
     error: Error | string | undefined | null,
@@ -88,48 +86,39 @@ export default class AuthenticationController {
         const { access_token: accessToken } = data;
         const profileScopeUrl = "/api/users/@me";
         return oauth2
-            .getProtectedResource<DiscordOAuthProfile>(
+            .getProtectedResource<DiscordOAuthProfile | OAuth2ProtectedResourceErrorResponse>(
                 profileScopeUrl,
                 accessToken
             )
             .then((profile) => {
-                return oauth2
-                    .getProtectedResource<
-                        OAuthGuild[] | OAuth2ProtectedResourceErrorResponse
-                    >(`${profileScopeUrl}/guilds`, accessToken)
-                    .then((guilds) => {
-                        if ("message" in guilds) {
-                            throw guilds;
-                        }
-                        const discordProfile: InternalOAuthProfile = {
-                            accentColor: profile.accent_color ?? null,
-                            avatar: buildDiscordResourceUrl(
-                                "avatars",
-                                profile.id,
-                                profile.avatar
-                            ),
-                            banner: buildDiscordResourceUrl(
-                                "banners",
-                                profile.id,
-                                profile.banner
-                            ),
-                            bannerColor: profile.banner_color ?? null,
-                            displayName: `${profile.username}#${profile.discriminator}`,
-                            id: profile.id,
-                        };
+                if ("message" in profile) {
+                    throw profile;
+                }
+                const discordProfile: InternalOAuthProfile = {
+                    accentColor: profile.accent_color ?? null,
+                    avatar: buildDiscordResourceUrl(
+                        "avatars",
+                        profile.id,
+                        profile.avatar
+                    ),
+                    banner: buildDiscordResourceUrl(
+                        "banners",
+                        profile.id,
+                        profile.banner
+                    ),
+                    bannerColor: profile.banner_color ?? null,
+                    displayName: `${profile.username}#${profile.discriminator}`,
+                    id: profile.id,
+                };
 
-                        const oauthUser = oAuthUserManager.create(
-                            { 
-                                profile: discordProfile,
-                                managedGuilds: guilds.filter(oAuthGuildAccessFilter)
-                            },
-                            false
-                        );
-                        oAuthUserManager.store(oauthUser);
-                        return oauth2
-                            .revokeToken(accessToken)
-                            .then(() => oauthUser);
-                    });
+                const oauthUser = oAuthUserManager.create(
+                    discordProfile,
+                    true
+                );
+
+                return oauth2
+                    .revokeToken(accessToken)
+                    .then(() => oauthUser);
             });
     }
 }
