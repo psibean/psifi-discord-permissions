@@ -6,6 +6,7 @@ import { DiscordUserData } from "../../../psd-types/src/types.js";
 import Loading from "../components/util/Loading.js";
 import { authenticatedPostJson } from "../util/api.js";
 import RequestError from "../util/RequestError.js";
+import { CLIENT_ROUTES } from "../util/constants.js";
 
 
 export default () => {
@@ -22,12 +23,16 @@ export default () => {
       try {
         const discordUserData = await authenticatedPostJson<DiscordUserData>(`/auth/discord/login?code=${code}&state=${state}`);
         dispatch(login(discordUserData!));
-        navigate('/dashboard/guilds');
+        navigate(CLIENT_ROUTES.DASHBOARD.GUILDS);
       } catch (error) {
-        if (error instanceof RequestError && (error.code === 401 || error.code === 403)) {
-          setAccess(false);
-        }
         console.dir(error, { depth: null })
+        if (error instanceof RequestError) {
+          if (error.code === 401 || error.code === 403) {
+            setAccess(false);
+          } else if (error.code === 400) {
+            navigate(CLIENT_ROUTES.ROOT)
+          }
+        }
       }
     }
 

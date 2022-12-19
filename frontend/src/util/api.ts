@@ -25,9 +25,11 @@ export const authenticatedGet = (url: string, request: RequestInit = {}) => {
 
 export const authenticatedGetJson = async <T extends Record<string, unknown>>(url: string, request: RequestInit = {}) => {
   const requestResponse = await authenticatedGet(url, request);
-  const responseData = await requestResponse.json() as T | { message: string };
-  if ("message" in responseData) {
-    throw new RequestError(requestResponse.status, (responseData as { message: string }).message);
+  const responseData = await requestResponse.json() as T | { error: { message: string } };
+  console.log("DATA:");
+  console.log(responseData);
+  if ("error" in responseData) {
+    throw new RequestError(requestResponse.status, (responseData.error as { message: string }).message);
   }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return responseData;
@@ -81,6 +83,8 @@ export const fetchGuild = async (guildId: string, dispatch: Dispatch) => {
       previous[current.id] = current.permissions;
       return previous;
     }, {} as SimulatedServerPermissions );
+    console.log("SERVER PERMISSIONS BEING SET:");
+    console.log(serverPermissions);
   
     const rolePermissions: Record<string, string> = {};
     Object.values(selectedGuild.roles).forEach(role => {
