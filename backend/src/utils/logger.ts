@@ -6,4 +6,4 @@ const transports = pino.transport({
   options: { destination: './psifibot.log', mkdir: true }
 })
 
-export default pino(transports);
+export const logger = pino(transports);

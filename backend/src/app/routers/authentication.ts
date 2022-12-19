@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import logger from '../../utils/logger.js';
+import { logger } from '../../utils/logger.js';
 import AuthenticationController from '..//controllers/AuthenticationController.js';
 
 const authenticationController = new AuthenticationController(logger);

@@ -1,10 +1,11 @@
 import { Client, Collection, PermissionFlagsBits, Snowflake } from "discord.js";
 import { guildToListedGuild, oAuthGuildToListedGuild } from "../../utils/transformers";
 import type { InternalOAuthProfile, OAuthGuild, DiscordUserData, ListedGuild } from "../../../../psd-types/src/types";
+import { hasPermission } from "../../utils/filters";
 
 export type OAuthUserOptions = {
   profile: InternalOAuthProfile;
-  guilds: OAuthGuild[];
+  managedGuilds: OAuthGuild[];
 }
 
 export class OAuthUser {
@@ -15,11 +16,10 @@ export class OAuthUser {
   refreshToken: string;
   lastTouched: number;
 
-  public constructor(client: Client, { profile, guilds }: OAuthUserOptions) {
+  public constructor(client: Client, { profile, managedGuilds }: OAuthUserOptions) {
     this.client = client;
     this.profile = profile;
 
-    const managedGuilds = guilds.filter(guild => guild.owner || BigInt(guild.permissions) & PermissionFlagsBits.Administrator);
     this.guilds = new Collection(managedGuilds.map(oAuthGuild => {
       if (this.client.guilds.cache.has(oAuthGuild.id)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

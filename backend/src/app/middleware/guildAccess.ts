@@ -1,7 +1,7 @@
 import { PermissionFlagsBits } from "discord.js";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import logger from "../../utils/logger";
+import { logger } from "../../utils/logger";
 import botClient from "../../bot/bot";
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -9,11 +9,17 @@ export default (req: Request, res: Response, next: NextFunction) => {
     guildId
   } = req.params;
 
+  const accessDeniedError = createHttpError(403, 'Access denied.');
+  
   const user = req.user;
   const guild = botClient.guilds.cache.get(guildId);
 
-  if (!user || !guild) {
-    return res.status(403).json(createHttpError(403, 'Access denied.'));
+  if (!user) {
+    return next(accessDeniedError);
+  }
+
+  if (!guild) {
+    return next(createHttpError(400, 'Bad request'));
   }
 
   if (guild.ownerId === user.id) {
@@ -24,9 +30,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (member.permissions.has(PermissionFlagsBits.Administrator)) {
       return next();
     }
-    return res.status(403).json(createHttpError(403, 'Access denied.'));
+    return next(accessDeniedError);
   }).catch((error) => {
     logger.error(error);
-    return res.status(403).json(createHttpError(403, 'Access denied.'));
+    return next(accessDeniedError);
   })
 }

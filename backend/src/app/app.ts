@@ -7,14 +7,14 @@ import session from './config/session.js';
 
 import { IS_HOSTING, PSD_BOT_TOKEN } from '../utils/constants.js';
 import rootRouter from './routers/root.js';
-import logger from '../utils/logger.js';
+import { logger } from '../utils/logger.js';
 import getPermittedMembers from '../utils/getPermittedMembers.js';
 import { oAuthUserManager } from './managers/OAuthUserManager.js';
 import { guildRepository } from '../database/repositories/GuildRepository.js';
 import prisma from '../database/db.js';
 import user from './middleware/user.js';
 import { guildToListedGuild } from '../utils/transformers.js';
-import { Logger } from 'pino';
+import type { Logger } from 'pino';
 
 
 export default class DiscordSecurityApp {

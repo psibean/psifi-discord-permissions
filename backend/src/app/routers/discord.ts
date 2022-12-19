@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import logger from '../../utils/logger.js';
+import { logger } from '../../utils/logger.js';
 import DiscordController from '../controllers/DiscordController.js';
 import guildAccess from '../middleware/guildAccess.js';
 

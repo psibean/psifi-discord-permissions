@@ -1,11 +1,11 @@
 import { Guild, PermissionFlagsBits } from "discord.js";
 import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import logger from "../../utils/logger.js";
 import botClient from "../../bot/bot.js";
 import { buildSelectedChannels, buildSelectedRoles, channelToChannelWithOverwrites, guildToListedGuild } from "../../utils/transformers.js";
 import { CHANNELS_INTERNAL_ERROR, CHANNEL_INTERNAL_ERROR, CHANNEL_NOT_FOUND, GUILDS_INTERNAL_ERROR, GUILD_INTERNAL_ERROR, GUILD_NOT_FOUND, ROLES_INTERNAL_ERROR } from "../../../../psd-types/src/errors.js";
 import { Logger } from "pino";
+import { guildAccessFilter } from "../../utils/filters.js";
 
 export default class DiscordController {
   private logger: Logger;
@@ -39,8 +39,8 @@ export default class DiscordController {
     try {
       // TODO: Error handling
       const { guilds } = req.body as { guilds: Guild[] };
-
       const accessibleGuilds: Guild[] = [];
+      const requestUser = req.user!;
 
       for (const guild of guilds) {
         if (botClient.guilds.cache.has(guild.id)) {
@@ -48,7 +48,7 @@ export default class DiscordController {
         }
       }
       return res.status(200).json({ 
-        guilds: accessibleGuilds.map(guild => guildToListedGuild(guild))
+        guilds: accessibleGuilds.filter(guildAccessFilter(requestUser.id)).map(guild => guildToListedGuild(guild))
       });
     } catch (error) {
       this.logger.error(error);
