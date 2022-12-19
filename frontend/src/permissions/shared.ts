@@ -25,4 +25,4 @@ export const managePermissionsForChannel = createPsifiPermission('Manage Permiss
 export const createInviteForVoiceChannel = createPsifiPermission('Create Invite', 'Allows members to invite new people to this server via a direct invite link to this channel. The recipient will automatically join the voice channel if they have permission to connect.', 'Membership Permissions', PermissionFlagsBits.CreateInstantInvite);
 export const manageEventsPermissionForChannel = createPsifiPermission('Manage Events', 'Allows members to create, edit, and cancel events in this channel.', 'Events Permissions', PermissionFlagsBits.ManageEvents);
 
-export const hasPermission = (permissionToCheck: bigint, permissions: bigint) => (permissions & permissionToCheck) === permissionToCheck;
+export const hasPermission = (permissionToCheck: bigint, permissions: bigint, checkAdmin = true) => (checkAdmin && ((permissions & PermissionFlagsBits.Administrator) === PermissionFlagsBits.Administrator)) || (permissions & permissionToCheck) === permissionToCheck;
