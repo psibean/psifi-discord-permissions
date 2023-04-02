@@ -11,8 +11,9 @@ export const SESSION_MAX_AGE = 7.2e+6;
 export const SESSION_SECRET = process.env.PSD_SESSION_SECRET as string;
 export const PSD_CLIENT_ID = process.env.PSD_CLIENT_ID as string;
 export const PSD_CLIENT_SECRET = process.env.PSD_CLIENT_SECRET as string;
-export const SRC_DIR = resolve(dirname(import.meta.url), '..');
+export const PSD_REDIRECT_URL = process.env.PSD_REDIRECT_URL as string ?? "http://localhost:5173/auth/login";
 
+export const SRC_DIR = resolve(dirname(import.meta.url), '..');
 export const NOT_LOGGED_IN = "Not logged in.";
 export const ACCESS_DENIED = "Access denied.";
 export const GUILDS_INTERNAL_ERROR = "Failed to get guilds.";

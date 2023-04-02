@@ -1,9 +1,10 @@
 
 export const PSD_API_URL = `/api`;
-export const PSD_FRONTEND_URL = `http://localhost:5173`;
-export const PSD_CLIENT_ID = "643569569176223744";
+export const PSD_FRONTEND_DOMAIN = import.meta.env.PSD_FRONTEND_DOMAIN as string | undefined ?? `localhost:5173`;
+export const PSD_PROTOCOL = import.meta.env.PSD_PROTOL as string | undefined ?? "https";
+export const PSD_CLIENT_ID = import.meta.env.PSD_CLIENT_ID as string | undefined ?? "643569569176223744";
 export const AUTHORIZE_URL = "https://discord.com/oauth2/authorize";
-export const GUILD_REDIRECT_URI = `${PSD_FRONTEND_URL}/auth/guild/invite`;
+export const GUILD_REDIRECT_URI = `${PSD_PROTOCOL}://${PSD_FRONTEND_DOMAIN}/auth/guild/invite`;
 
 export const CLIENT_ROUTES = {
   AUTH: {

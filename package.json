@@ -1,5 +1,5 @@
 {
-  "name": "psifi-security-discord",
+  "name": "psifi-discord-permissions",
   "version": "1.0.0",
   "description": "Monorepo for Psifi Security: Discord",
   "type":"module",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/psibean/psifi-security-discord.git"
+    "url": "git+https://github.com/psibean/psifi-discord-permissions.git"
   },
   "author": "psibean",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/psibean/psifi-security-discord/issues"
+    "url": "https://github.com/psibean/psifi-discord-permissions/issues"
   },
-  "homepage": "https://github.com/psibean/psifi-security-discord#readme",
+  "homepage": "https://github.com/psibean/psifi-discord-permissions#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",

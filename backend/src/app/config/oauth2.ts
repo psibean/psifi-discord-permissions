@@ -1,4 +1,4 @@
-import { PSD_CLIENT_ID, PSD_CLIENT_SECRET } from '../../utils/constants.js';
+import { PSD_CLIENT_ID, PSD_CLIENT_SECRET, PSD_REDIRECT_URL } from '../../utils/constants.js';
 import OAuth2PKCE from './oauth2/Oauth2PKCE.js';
 
 const {
@@ -13,7 +13,7 @@ const {
     clientId: PSD_CLIENT_ID,
     clientSecret: PSD_CLIENT_SECRET,
     accessTokenUrl: "/api/oauth2/token",
-    redirectUrl: "http://localhost:5173/auth/login"
+    redirectUrl: PSD_REDIRECT_URL
   },
   retrieveState: (req) => {
     return req.session.state;
